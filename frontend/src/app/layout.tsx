@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { theme } from "antd/es";
+import ConfigProvider from "antd/es/config-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,11 +24,28 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { darkAlgorithm } = theme;
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-      </body>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#fa541c",
+            colorInfo: "#fa541c",
+            fontSize: 14,
+          },
+          components: {
+            Input: {
+              colorText: "rgb(255,255,255)",
+            },
+          },
+          algorithm: darkAlgorithm,
+        }}
+      >
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          {children}
+        </body>
+      </ConfigProvider>
     </html>
   );
 }
