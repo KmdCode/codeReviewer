@@ -1,13 +1,13 @@
 'use client';
 import { Button, Form, Input, Typography } from 'antd';
-import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
-import { useStyles } from './styles/styles';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { useStyles } from '../signup/styles/styles';
 import Link from 'next/link';
 
 const { Title } = Typography;
 
 
-const SignupPage = () => {
+const SignInPage = () => {
   const { styles } = useStyles();
 
   const handleSubmit = () => {
@@ -18,7 +18,7 @@ const SignupPage = () => {
     <div className={styles.container}>
       <div className={styles.card}>
         <Title level={3} className={styles.title}>
-          Create Your Account
+          Login to your Account
         </Title>
 
         <Form
@@ -27,18 +27,6 @@ const SignupPage = () => {
           onFinish={handleSubmit}
           requiredMark={false}
         >
-          <Form.Item       
-            name="name"
-            rules={[{ required: true, message: 'Please enter your name' }]}
-          >
-            <Input
-              size="large"
-              placeholder="Username"
-              style={{ color: '#000000'}}
-              prefix={<UserOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
-            />
-          </Form.Item>
-
           <Form.Item
             name="email"
             rules={[
@@ -48,7 +36,7 @@ const SignupPage = () => {
           >
             <Input
               size="large"
-              placeholder="you@example.com"
+              placeholder="username or email"
               style={{ color: '#000000'}}
               prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem'}}/>}
             />
@@ -68,15 +56,15 @@ const SignupPage = () => {
 
           <Form.Item>
             <Button htmlType="submit" type="primary" className={styles.submitBtn}>
-              Sign Up
+              Login
             </Button>
           </Form.Item>
         </Form>
 
         <div className={styles.footerText}>
-          Already have an account?{' '}
-          <Link href="/login">
-            <strong>Sign In</strong>
+          Dont have an account?{' '}
+          <Link href="/signup">
+            <strong>Signup</strong>
           </Link>
         </div>
       </div>
@@ -84,4 +72,4 @@ const SignupPage = () => {
   );
 }
 
-export default SignupPage;
+export default SignInPage;

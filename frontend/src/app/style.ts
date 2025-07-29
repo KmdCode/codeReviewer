@@ -3,7 +3,7 @@ import { createStyles, css } from 'antd-style';
 export const useStyles = createStyles(() => ({
   container: css`
     min-height: 100vh;
-    background-color: #fff;
+    background: linear-gradient(135deg, #f5f7fa, #e4ebf5);
     display: flex;
     justify-content: center;
     align-items: center;
