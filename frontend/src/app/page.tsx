@@ -1,12 +1,12 @@
 'use client';
 import { Button, Typography } from 'antd';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useStyles } from './style';
 
 const { Title, Paragraph } = Typography;
 
 export default function LandingPage() {
-  const { styles, cx } = useStyles();
+  const { styles } = useStyles();
 
   return (
     <div className={styles.container}>
