@@ -29,7 +29,6 @@ const LandingPage = () => {
             type="primary"
             className={styles.button}
             size="large"
-            href="/review"
           >
             Get Started
           </Button>
