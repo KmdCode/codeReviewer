@@ -55,9 +55,13 @@ const SignInPage = () => {
           </Form.Item>
 
           <Form.Item>
+
+            <Link href="/homepage">
             <Button htmlType="submit" type="primary" className={styles.submitBtn}>
               Login
             </Button>
+          </Link>
+
           </Form.Item>
         </Form>
 
