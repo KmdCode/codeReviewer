@@ -4,7 +4,7 @@ export const useStyles = createStyles(({ token }) => ({
   container: css`
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa, #e4ebf5);
-    padding: 4rem 1rem;
+    padding: 1rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
