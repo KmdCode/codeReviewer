@@ -3,15 +3,17 @@ import { Typography, Button, Row, Col, Card } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useStyles } from './styles/style';
+import Navbar from '@/components/navbar/Navbar';
 
 const { Title, Paragraph } = Typography;
-
 
 const HomePage = () => {
   const { styles } = useStyles();
 
   return (
-    <div className={styles.container}>
+   <>
+    <Navbar/>
+     <div className={styles.container}>
       <section className={styles.section}>
 
       </section>
@@ -72,6 +74,7 @@ const HomePage = () => {
         </div>
       </section>
     </div>
+   </>
   );
 }
 
