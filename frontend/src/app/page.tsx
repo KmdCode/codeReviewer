@@ -2,10 +2,11 @@
 import { Button, Typography } from 'antd';
 // import Image from 'next/image';
 import { useStyles } from './style';
+import Link from 'next/link';
 
 const { Title, Paragraph } = Typography;
 
-export default function LandingPage() {
+const LandingPage = () => {
   const { styles } = useStyles();
 
   return (
@@ -22,15 +23,20 @@ export default function LandingPage() {
         <Paragraph className={styles.paragraph}>
           Instant AI and Static feedback for your code. Improve quality, catch bugs, and learn better.
         </Paragraph>
-        <Button
-          type="primary"
-          className={styles.button}
-          size="large"
-          href="/review"
-        >
-          Get Started
-        </Button>
+
+        <Link href="/signup">
+          <Button
+            type="primary"
+            className={styles.button}
+            size="large"
+            href="/review"
+          >
+            Get Started
+          </Button>
+        </Link>
       </div>
     </div>
   );
 }
+
+export default LandingPage;
