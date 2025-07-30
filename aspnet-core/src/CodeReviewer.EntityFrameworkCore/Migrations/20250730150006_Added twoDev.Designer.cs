@@ -3,6 +3,7 @@ using System;
 using CodeReviewer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeReviewer.Migrations
 {
     [DbContext(typeof(CodeReviewerDbContext))]
-    partial class CodeReviewerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250730150006_Added twoDev")]
+    partial class AddedtwoDev
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1610,14 +1613,14 @@ namespace CodeReviewer.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Surname")
+                    b.Property<string>("Password")
                         .HasColumnType("text");
 
                     b.Property<long?>("UserAccountId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

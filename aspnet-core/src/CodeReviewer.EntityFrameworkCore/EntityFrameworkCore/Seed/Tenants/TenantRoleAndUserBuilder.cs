@@ -84,6 +84,19 @@ namespace CodeReviewer.EntityFrameworkCore.Seed.Tenants
                 _context.UserRoles.Add(new UserRole(_tenantId, adminUser.Id, adminRole.Id));
                 _context.SaveChanges();
             }
+
+            //Developer Role
+
+            var developerRole = _context.Roles.IgnoreQueryFilters()
+               .FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.Developer);
+
+            if (developerRole == null)
+            {
+                developerRole = _context.Roles
+                    .Add(new Role(null, "Developer", "Developer") { IsStatic = true })
+                    .Entity;
+                _context.SaveChanges();
+            }
         }
     }
 }
