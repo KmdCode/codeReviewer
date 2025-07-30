@@ -46,7 +46,7 @@ const HomePage = () => {
           </Col>
         </Row>
                 <Button type="primary" size="large" className={styles.demoBtn}>
-          <Link href="/review">Try Live Demo</Link>
+          <Link href="/review">Try Us Out</Link>
         </Button>
       </section>
 

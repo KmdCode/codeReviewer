@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "antd": "^5.26.6",
     "antd-style": "^3.7.1",
     "framer-motion": "^12.23.11",
