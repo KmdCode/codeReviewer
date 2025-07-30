@@ -20,6 +20,7 @@ namespace CodeReviewer
         public override void PreInitialize()
         {
             Configuration.Auditing.IsEnabledForAnonymousUsers = true;
+            Clock.Provider = ClockProviders.Utc;
 
             // Declare entity types
             Configuration.Modules.Zero().EntityTypes.Tenant = typeof(Tenant);
