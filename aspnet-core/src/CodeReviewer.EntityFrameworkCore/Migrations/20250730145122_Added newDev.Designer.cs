@@ -3,6 +3,7 @@ using System;
 using CodeReviewer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeReviewer.Migrations
 {
     [DbContext(typeof(CodeReviewerDbContext))]
-    partial class CodeReviewerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250730145122_Added newDev")]
+    partial class AddednewDev
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1580,52 +1583,6 @@ namespace CodeReviewer.Migrations
                     b.ToTable("AbpUsers");
                 });
 
-            modelBuilder.Entity("CodeReviewer.Domain.Developers.Developer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("text");
-
-                    b.Property<long?>("UserAccountId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserAccountId");
-
-                    b.ToTable("Developers");
-                });
-
             modelBuilder.Entity("CodeReviewer.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1906,15 +1863,6 @@ namespace CodeReviewer.Migrations
                     b.Navigation("DeleterUser");
 
                     b.Navigation("LastModifierUser");
-                });
-
-            modelBuilder.Entity("CodeReviewer.Domain.Developers.Developer", b =>
-                {
-                    b.HasOne("CodeReviewer.Authorization.Users.User", "UserAccount")
-                        .WithMany()
-                        .HasForeignKey("UserAccountId");
-
-                    b.Navigation("UserAccount");
                 });
 
             modelBuilder.Entity("CodeReviewer.MultiTenancy.Tenant", b =>
