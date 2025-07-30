@@ -9,12 +9,12 @@ import Navbar from '@/components/navbar/Navbar';
 
 const { Title } = Typography;
 
-export default function ReviewPage() {
+const ReviewPage = () => {
     const { styles } = useStyles();
     const [language, setLanguage] = useState('typescript');
     const [reviewType, setReviewType] = useState('static');
     const [code, setCode] = useState('// Paste or upload code');
-    const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-light');
+    const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<string | null>(null);
 
     const handleUpload = (file: UploadFile) => {
@@ -120,3 +120,5 @@ export default function ReviewPage() {
         </>
     );
 }
+
+export default ReviewPage;
