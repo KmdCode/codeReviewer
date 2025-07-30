@@ -9,7 +9,7 @@ import { useStyles } from './style';
 const menuItems = [
   { label: 'Review', key: '/review' },
   { label: 'Saved', key: '/saved-reviews' },
-  { label: 'AI Assistance', key: '/assistant' },
+  { label: 'AI Assistance', key: '/ai-assistance' },
   { label: 'Profile', key: '/profile' },
 ];
 
