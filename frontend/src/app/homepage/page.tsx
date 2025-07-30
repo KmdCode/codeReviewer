@@ -46,12 +46,12 @@ const HomePage = () => {
           </Col>
         </Row>
                 <Button type="primary" size="large" className={styles.demoBtn}>
-          <Link href="/review">Try Us Out</Link>
+          <Link href="/review">Review Now</Link>
         </Button>
       </section>
 
       <section className={styles.section}>
-        <Title level={3}>App Screenshots</Title>
+        <Title level={3}>Demo</Title>
         <div className={styles.screenshots}>
           <div className={styles.screenshot}>
             <Image

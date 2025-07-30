@@ -8,8 +8,7 @@ import { useStyles } from './style';
 
 const menuItems = [
   { label: 'Review', key: '/review' },
-  { label: 'History', key: '/history' },
-  { label: 'Saved', key: '/saved' },
+  { label: 'Saved', key: '/saved-reviews' },
   { label: 'AI Assistance', key: '/assistant' },
   { label: 'Profile', key: '/profile' },
 ];

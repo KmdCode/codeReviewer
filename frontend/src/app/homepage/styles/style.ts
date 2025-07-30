@@ -19,7 +19,7 @@ export const useStyles = createStyles(({ token }) => ({
   demoBtn: css`
     background-color: #fa541c;
     border-color: #fa541c;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     font-size: 1rem;
     padding: 0.75rem 2rem;
     height: auto;
@@ -41,6 +41,7 @@ export const useStyles = createStyles(({ token }) => ({
   benefitCard: css`
     border-radius: 0.75rem;
     height: 100%;
+    margin-top: 1rem;
     text-align: left;
     box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.06);
     padding: 1.25rem;
