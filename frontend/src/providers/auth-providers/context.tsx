@@ -17,8 +17,8 @@ export interface IAuthStateContext {
 }
 
 export interface IAuthActionContext {
-    registerDeveloper: (user: IUser) => Promise<void>;
-    loginUser: (user: IUser) => Promise<void>;
+    registerDeveloper: (user: IUser) => void;
+    loginUser: (user: IUser) => void;
 }
 
 export const INITIAL_STATE: IAuthStateContext = {

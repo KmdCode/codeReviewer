@@ -53,7 +53,10 @@ namespace CodeReviewer.Web.Host.Startup
                 options => options.AddPolicy(
                     _defaultCorsPolicyName,
                     builder => builder
-                        .WithOrigins("https://localhost:44311")
+                        .WithOrigins(_appConfiguration["App:CorsOrigins"]
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(o => o.RemovePostFix("/"))
+                            .ToArray())
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()

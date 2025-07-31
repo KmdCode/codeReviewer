@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using CodeReviewer.Services.Analysis;
 using CodeReviewer.Services.Analysis.Dto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 public class StaticAnalyzerAppService : ApplicationService, IStaticAnalyzerAppService
 {
-    public Task<List<ViolationDto>> AnalyzeAsync(string code)
+    public Task<List<ViolationDto>> AnalyzeAsync([FromBody] string code)
     {
         var tree = CSharpSyntaxTree.ParseText(code);
         var root = tree.GetRoot();
