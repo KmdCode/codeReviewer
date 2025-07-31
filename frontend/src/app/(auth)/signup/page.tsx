@@ -1,17 +1,33 @@
 'use client';
 import { Button, Form, Input, Typography } from 'antd';
+import type { FormProps } from "antd";
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useStyles } from './styles/styles';
+import { useAuthActions, useAuthState } from '@/providers/auth-providers';
+import { IUser } from '@/providers/auth-providers/context';
 import Link from 'next/link';
 
 const { Title } = Typography;
 
+const SignupPage: React.FC = () => {
 
-const SignupPage = () => {
   const { styles } = useStyles();
+  const { registerDeveloper } = useAuthActions();
+  const { isError } = useAuthState();
 
-  const handleSubmit = () => {
-    console.log('Sign Up Data:') 
+  if (isError) {
+    return (<div>Registration Error</div>);
+  }
+
+  const onFinish: FormProps<IUser>['onFinish'] = (values) => {
+    const newUser: IUser = {
+      name: values.name,
+      surname: values.surname,
+      userName: values.userName,
+      email: values.email,
+      password: values.password,
+    };
+    registerDeveloper(newUser);
   };
 
   return (
@@ -24,17 +40,39 @@ const SignupPage = () => {
         <Form
           layout="vertical"
           className={styles.form}
-          onFinish={handleSubmit}
+          onFinish={onFinish}
           requiredMark={false}
         >
-          <Form.Item       
+          <Form.Item
             name="name"
             rules={[{ required: true, message: 'Please enter your name' }]}
           >
             <Input
               size="large"
+              placeholder="name"
+              style={{ color: '#000000' }}
+              prefix={<UserOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
+            />
+          </Form.Item>
+          <Form.Item
+            name="surname"
+            rules={[{ required: true, message: 'Please enter your surname' }]}
+          >
+            <Input
+              size="large"
+              placeholder="surname"
+              style={{ color: '#000000' }}
+              prefix={<UserOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
+            />
+          </Form.Item>
+          <Form.Item
+            name="userName"
+            rules={[{ required: true, message: 'Please enter your username' }]}
+          >
+            <Input
+              size="large"
               placeholder="Username"
-              style={{ color: '#000000'}}
+              style={{ color: '#000000' }}
               prefix={<UserOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
             />
           </Form.Item>
@@ -49,8 +87,8 @@ const SignupPage = () => {
             <Input
               size="large"
               placeholder="you@example.com"
-              style={{ color: '#000000'}}
-              prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem'}}/>}
+              style={{ color: '#000000' }}
+              prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
             />
           </Form.Item>
 
@@ -61,8 +99,8 @@ const SignupPage = () => {
             <Input.Password
               size="large"
               placeholder="••••••••"
-              style={{ color: '#000000'}}
-              prefix={<LockOutlined style={{ color: '#999', paddingRight: '0.5rem' }}/>}
+              style={{ color: '#000000' }}
+              prefix={<LockOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
             />
           </Form.Item>
 

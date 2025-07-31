@@ -98,7 +98,7 @@ const ReviewPage = () => {
                         onChange={(e) => setReviewType(e.target.value)}
                     >
                         <Radio.Button value="static">Static</Radio.Button>
-                        <Radio.Button value="ai">AI</Radio.Button>
+                        <Radio.Button disabled value="ai">AI</Radio.Button>
                     </Radio.Group>
 
                     <Button type="primary" size="large" onClick={handleReview}>

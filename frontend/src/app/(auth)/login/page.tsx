@@ -2,17 +2,30 @@
 import { Button, Form, Input, Typography } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useStyles } from '../signup/styles/styles';
+import type { FormProps } from "antd";
+import { useAuthActions, useAuthState } from '@/providers/auth-providers';
 import Link from 'next/link';
+import { IUser } from '@/providers/auth-providers/context';
 
 const { Title } = Typography;
 
-
 const SignInPage = () => {
   const { styles } = useStyles();
+  const { loginUser } = useAuthActions();
+  const { isError } = useAuthState();
 
-  const handleSubmit = () => {
-    console.log('Sign Up Data:') 
+  const onFinish: FormProps<IUser>['onFinish'] = async (values) => {
+    const newUser: IUser = {
+      userNameOrEmailAddress: values.userNameOrEmailAddress,
+      password: values.password
+    };
+    loginUser(newUser);
+
   };
+
+  if (isError) {
+    return (<div>Login Error</div>);
+  }
 
   return (
     <div className={styles.container}>
@@ -24,11 +37,11 @@ const SignInPage = () => {
         <Form
           layout="vertical"
           className={styles.form}
-          onFinish={handleSubmit}
+          onFinish={onFinish}
           requiredMark={false}
         >
           <Form.Item
-            name="email"
+            name="userNameOrEmailAddress"
             rules={[
               { required: true, message: 'Please enter your email' },
               { type: 'email', message: 'Invalid email address' },
@@ -37,8 +50,8 @@ const SignInPage = () => {
             <Input
               size="large"
               placeholder="username or email"
-              style={{ color: '#000000'}}
-              prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem'}}/>}
+              style={{ color: '#000000' }}
+              prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
             />
           </Form.Item>
 
@@ -49,18 +62,18 @@ const SignInPage = () => {
             <Input.Password
               size="large"
               placeholder="••••••••"
-              style={{ color: '#000000'}}
-              prefix={<LockOutlined style={{ color: '#999', paddingRight: '0.5rem' }}/>}
+              style={{ color: '#000000' }}
+              prefix={<LockOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
             />
           </Form.Item>
 
           <Form.Item>
 
             <Link href="/homepage">
-            <Button htmlType="submit" type="primary" className={styles.submitBtn}>
-              Login
-            </Button>
-          </Link>
+              <Button htmlType="submit" type="primary" className={styles.submitBtn}>
+                Login
+              </Button>
+            </Link>
 
           </Form.Item>
         </Form>
