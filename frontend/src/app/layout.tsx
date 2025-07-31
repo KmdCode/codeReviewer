@@ -4,6 +4,7 @@ import "./globals.css";
 import { theme } from "antd/es";
 import ConfigProvider from "antd/es/config-provider";
 import { AuthProvider } from "@/providers/auth-providers";
+import { ReviewProvider } from "@/providers/review-provider";
 
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
+        <ReviewProvider>
         <ConfigProvider
           theme={{
             token: {
@@ -39,6 +41,7 @@ export default function RootLayout({
             {children}
           </body>
         </ConfigProvider>
+        </ReviewProvider>
       </AuthProvider>
     </html>
   );

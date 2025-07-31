@@ -10,7 +10,7 @@ export interface IReviewStateContext {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean; 
-    review?: ICode;
+    review?: ICode[];
 }
 
 export interface IReviewActionContext {

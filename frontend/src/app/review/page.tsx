@@ -8,16 +8,22 @@ import type { UploadFile } from 'antd/es/upload/interface';
 import Navbar from '@/components/navbar/Navbar';
 import { analyzeCode, Violation } from '@/utils/analyzer/staticAnalyzer';
 import type { UploadRequestOption, UploadRequestFile } from 'rc-upload/lib/interface';
+import { useReviewActions, useReviewState } from '@/providers/review-provider';
+import { ICode } from '@/providers/review-provider/context';
 
 const { Title } = Typography;
 
 const ReviewPage = () => {
+
     const { styles } = useStyles();
     const [language, setLanguage] = useState('typescript');
     const [reviewType, setReviewType] = useState('static');
+    const { analyzeCSharpCode } = useReviewActions();
+    const { isError, review} = useReviewState();
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<Violation[]>([]);
+    const [cSharp, setCSharp] = useState();
 
     const handleFileUpload = (options: UploadRequestOption<UploadRequestFile>) => {
         const { file, onError } = options;
@@ -27,7 +33,7 @@ const ReviewPage = () => {
         reader.onload = (e) => {
             if (typeof e.target?.result === 'string') {
                 setCode(e.target.result);
-                message.success('File loaded into editor!');                
+                message.success('File loaded into editor!');
             }
         };
 
@@ -45,11 +51,18 @@ const ReviewPage = () => {
             return;
         }
 
-        if (reviewType === "static") {
+        if (reviewType === "static" && language === "typescript") {
             const issues = analyzeCode(code);
             setResults(issues);
             console.log(issues);
-        } else {
+        }
+        else if (reviewType === "static" && language === "csharp") {
+
+            analyzeCSharpCode(code);
+            console.log("Review: ",review);
+            
+        }
+        else {
             console.log("AI Review");
         }
     };
@@ -140,6 +153,28 @@ const ReviewPage = () => {
                     </div>
                 )}
 
+                {review && review.length > 0 && (
+                    <div className={styles.results}>
+                        <Title level={4}>Review review</Title>
+
+                        <List
+                            bordered
+                            dataSource={review}
+                            className={styles.resultBox}
+                            renderItem={(item) => (
+                                <List.Item>
+                                    <strong>Line {item.line}</strong>: {item.message}
+                                </List.Item>
+                            )}
+                        />
+
+                        <div className={styles.resultActions}>
+                            <Button>Export</Button>
+                            <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
+                        </div>
+                    </div>
+                )}
+                
             </div>
         </>
     );
