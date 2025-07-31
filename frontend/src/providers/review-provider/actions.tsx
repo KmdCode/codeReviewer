@@ -19,13 +19,13 @@ export const analyzeCSharpCodePending = createAction<IReviewStateContext>(
     )
 )
 
-export const analyzeCSharpCodeSuccess = createAction<IReviewStateContext, ICode>(
-    ReviewActionEnum.analyzeCSharpCodeSuccess, (code: ICode) => (
+export const analyzeCSharpCodeSuccess = createAction<IReviewStateContext, ICode[]>(
+    ReviewActionEnum.analyzeCSharpCodeSuccess, (review: ICode[]) => (
         {
             isPending: false,
             isSuccess: true,
             isError: false,
-            code
+            review
         }
     )
 )
