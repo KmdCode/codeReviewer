@@ -1,11 +1,13 @@
 'use client';
 import { useState } from 'react';
-import { Button, Select, Radio, Typography, Upload, message } from 'antd';
+import { Button, Select, Radio, Typography, Upload, message, List } from 'antd';
 import { UploadOutlined, OpenAIOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { useStyles } from './style/style';
 import type { UploadFile } from 'antd/es/upload/interface';
 import Navbar from '@/components/navbar/Navbar';
+import { analyzeCode, Violation } from '@/utils/analyzer/staticAnalyzer';
+import type { UploadRequestOption, UploadRequestFile } from 'rc-upload/lib/interface';
 
 const { Title } = Typography;
 
@@ -15,22 +17,26 @@ const ReviewPage = () => {
     const [reviewType, setReviewType] = useState('static');
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
-    const [results, setResults] = useState<string | null>(null);
+    const [results, setResults] = useState<Violation[]>([]);
 
-    const handleUpload = (file: UploadFile) => {
-        const actualFile = file.originFileObj;
+    const handleFileUpload = (options: UploadRequestOption<UploadRequestFile>) => {
+        const { file, onError } = options;
 
-        if (actualFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                if (typeof e.target?.result === 'string') {
-                    setCode(e.target.result);
-                }
-            };
-            reader.readAsText(actualFile);
-        }
+        const reader = new FileReader();
 
-        return false;
+        reader.onload = (e) => {
+            if (typeof e.target?.result === 'string') {
+                setCode(e.target.result);
+                message.success('File loaded into editor!');                
+            }
+        };
+
+        reader.onerror = () => {
+            message.error('Failed to read file.');
+            onError?.(new Error('File reading error'));
+        };
+
+        reader.readAsText(file as Blob);
     };
 
     const handleReview = () => {
@@ -38,9 +44,14 @@ const ReviewPage = () => {
             message.warning('Please enter or upload code before reviewing.');
             return;
         }
-        setResults(
-            ` Review Type: ${reviewType}\n Language: ${language}\n\n Feedback:\n- No critical issues found.\n- Consider using consistent naming conventions.\n- Add inline comments for clarity.`
-        );
+
+        if (reviewType === "static") {
+            const issues = analyzeCode(code);
+            setResults(issues);
+            console.log(issues);
+        } else {
+            console.log("AI Review");
+        }
     };
 
     return (
@@ -60,12 +71,13 @@ const ReviewPage = () => {
                         ]}
                     />
                     <Upload
-                        beforeUpload={handleUpload}
-                        showUploadList={false}
                         accept=".ts,.cs,.txt"
+                        showUploadList={false}
+                        customRequest={handleFileUpload}
                     >
                         <Button icon={<UploadOutlined />}>Upload Code</Button>
                     </Upload>
+
                     <Select
                         className={styles.themeSelector}
                         value={editorTheme}
@@ -82,7 +94,7 @@ const ReviewPage = () => {
                         height="24rem"
                         language={language === 'csharp' ? 'csharp' : 'typescript'}
                         value={code}
-                        onChange={(value) => setCode(value || '')}
+                        onChange={(value) => setCode(value || "")}
                         theme={editorTheme}
                         options={{
                             minimap: { enabled: false },
@@ -106,16 +118,28 @@ const ReviewPage = () => {
                     </Button>
                 </div>
 
-                {results && (
+                {results && results.length > 0 && (
                     <div className={styles.results}>
                         <Title level={4}>Review Results</Title>
-                        <pre className={styles.resultBox}>{results}</pre>
+
+                        <List
+                            bordered
+                            dataSource={results}
+                            className={styles.resultBox}
+                            renderItem={(item) => (
+                                <List.Item>
+                                    <strong>Line {item.line}</strong>: {item.message}
+                                </List.Item>
+                            )}
+                        />
+
                         <div className={styles.resultActions}>
                             <Button>Export</Button>
                             <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
                         </div>
                     </div>
                 )}
+
             </div>
         </>
     );
