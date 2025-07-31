@@ -43,8 +43,7 @@ const SignInPage = () => {
           <Form.Item
             name="userNameOrEmailAddress"
             rules={[
-              { required: true, message: 'Please enter your email' },
-              { type: 'email', message: 'Invalid email address' },
+              { required: true, message: 'Please enter your email' }
             ]}
           >
             <Input
@@ -69,11 +68,10 @@ const SignInPage = () => {
 
           <Form.Item>
 
-            <Link href="/homepage">
+         
               <Button htmlType="submit" type="primary" className={styles.submitBtn}>
                 Login
               </Button>
-            </Link>
 
           </Form.Item>
         </Form>

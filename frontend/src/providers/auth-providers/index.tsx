@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const registerDeveloper = async (user: IUser) => {
         dispatch(registerDeveloperPending());
-        const endpoint: string = '/api/services/app/Developer/Create';
+        const endpoint: string = '/services/app/Developer/Create';
 
         await instance.post(endpoint, user)
             .then((response) => {

@@ -58,9 +58,12 @@ const Navbar = () => {
                 </Link>
               </div>
             ))}
-            <Button className={styles.logoutBtn} block>
-              Logout
-            </Button>
+            <Link href={'/'}>
+              <Button className={styles.logoutBtn} block>
+                Logout
+                
+              </Button>
+            </Link>
           </Drawer>
         </>
       )}
