@@ -3,16 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { theme } from "antd/es";
 import ConfigProvider from "antd/es/config-provider";
+import { AuthProvider } from "@/providers/auth-providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,25 +19,27 @@ export default function RootLayout({
   const { darkAlgorithm } = theme;
   return (
     <html lang="en">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#fa541c",
-            colorInfo: "#fa541c",
-            fontSize: 14,
-          },
-          components: {
-            Input: {
-              colorText: "rgb(255,255,255)",
+      <AuthProvider>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#fa541c",
+              colorInfo: "#fa541c",
+              fontSize: 14,
             },
-          },
-          algorithm: darkAlgorithm,
-        }}
-      >
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          {children}
-        </body>
-      </ConfigProvider>
+            components: {
+              Input: {
+                colorText: "rgb(255,255,255)",
+              },
+            },
+            algorithm: darkAlgorithm,
+          }}
+        >
+          <body>
+            {children}
+          </body>
+        </ConfigProvider>
+      </AuthProvider>
     </html>
   );
 }
