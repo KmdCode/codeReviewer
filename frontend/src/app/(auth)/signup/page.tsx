@@ -118,6 +118,10 @@ const SignupPage: React.FC = () => {
           </Link>
         </div>
       </div>
+      <div className={`${styles.shape} ${styles.circle}`} />
+      <div className={`${styles.shape} ${styles.square}`} />
+      <div className={`${styles.shape} ${styles.triangle}`} />
+      <div className={`${styles.shape} ${styles.rectangle}`} />
     </div>
   );
 }

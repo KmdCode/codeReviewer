@@ -34,6 +34,12 @@ const LandingPage = () => {
           </Button>
         </Link>
       </div>
+      <div className={`${styles.shape} ${styles.circle}`} />
+      <div className={`${styles.shape} ${styles.square}`} />
+      <div className={`${styles.shape} ${styles.triangle}`} />
+      <div className={`${styles.shape} ${styles.rectangle}`} />
+
+
     </div>
   );
 }

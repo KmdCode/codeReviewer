@@ -28,7 +28,7 @@ const dummyReviews = [
   },
 ];
 
-const SavedReviewsPage  = () => {
+const SavedReviewsPage = () => {
   const { styles } = useStyles();
 
   const renderMeta = (review: typeof dummyReviews[number]) => (
@@ -97,6 +97,9 @@ const SavedReviewsPage  = () => {
             </Collapse>
           )}
         </div>
+        <div className={`${styles.shape} ${styles.circle}`} />
+        <div className={`${styles.shape} ${styles.square}`} />
+        <div className={`${styles.shape} ${styles.triangle}`} />
       </div>
     </>
   );

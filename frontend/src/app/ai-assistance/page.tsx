@@ -18,11 +18,16 @@ const AssistantPage = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
+
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        const container = chatContainerRef.current;
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
     };
+
 
     useEffect(scrollToBottom, [messages]);
 
@@ -37,7 +42,6 @@ const AssistantPage = () => {
             const assistantMsg: Message = {
                 role: 'assistant',
                 text: 'Here’s my explanation for your code:',
-                
             };
             setMessages((prev) => [...prev, assistantMsg]);
             setLoading(false);
@@ -51,14 +55,13 @@ const AssistantPage = () => {
             <div className={styles.page}>
                 <div className={styles.container}>
                     <Title level={2} className={styles.title}>AI Assistance</Title>
-                    <div className={styles.chatContainer}>
+                    <div ref={chatContainerRef} className={styles.chatContainer}>
                         {messages.map((msg, idx) => (
                             <div key={idx} className={msg.role === 'user' ? styles.userMsg : styles.aiMsg}>
                                 {msg.text}
                             </div>
                         ))}
                         {loading && <Spin />}
-                        <div ref={messagesEndRef} />
                     </div>
 
                     <div className={styles.inputContainer}>
@@ -74,6 +77,9 @@ const AssistantPage = () => {
                         </Button>
                     </div>
                 </div>
+                <div className={`${styles.shape} ${styles.circle}`} />
+                <div className={`${styles.shape} ${styles.square}`} />
+                <div className={`${styles.shape} ${styles.triangle}`} />
             </div>
 
         </>
