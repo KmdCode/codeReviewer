@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Button, Select, Radio, Typography, Upload, message, List } from 'antd';
+import { Button, Select, Radio, Typography, Upload, message, List, Spin } from 'antd';
 import { UploadOutlined, OpenAIOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { useStyles } from './style/style';
@@ -19,7 +19,7 @@ const ReviewPage = () => {
     const [language, setLanguage] = useState('typescript');
     const [reviewType, setReviewType] = useState('static');
     const { analyzeCSharpCode } = useReviewActions();
-    const { isError, review} = useReviewState();
+    const { isError, isPending, review } = useReviewState();
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<Violation[]>([]);
@@ -59,8 +59,8 @@ const ReviewPage = () => {
         else if (reviewType === "static" && language === "csharp") {
 
             analyzeCSharpCode(code);
-            console.log("Review: ",review);
-            
+            console.log("Review: ", review);
+
         }
         else {
             console.log("AI Review");
@@ -153,28 +153,29 @@ const ReviewPage = () => {
                     </div>
                 )}
 
-                {review && review.length > 0 && (
-                    <div className={styles.results}>
-                        <Title level={4}>Review review</Title>
-
-                        <List
-                            bordered
-                            dataSource={review}
-                            className={styles.resultBox}
-                            renderItem={(item) => (
-                                <List.Item>
-                                    <strong>Line {item.line}</strong>: {item.message}
-                                </List.Item>
-                            )}
-                        />
-
-                        <div className={styles.resultActions}>
-                            <Button>Export</Button>
-                            <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
+                <Spin spinning={isPending} tip="Reviewing code..." size="large">
+                    {review && review.length > 0 && (
+                        <div className={styles.results}>
+                            <Title level={4}>Review review</Title>
+                            <List
+                                bordered
+                                dataSource={review}
+                                className={styles.resultBox}
+                                renderItem={(item) => (
+                                    <List.Item>
+                                        <strong>Line {item.line}</strong>: {item.message}
+                                    </List.Item>
+                                )}
+                            />
+                            <div className={styles.resultActions}>
+                                <Button>Export</Button>
+                                <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
+                            </div>
                         </div>
-                    </div>
-                )}
-                
+                    )}
+                </Spin>
+
+
             </div>
         </>
     );

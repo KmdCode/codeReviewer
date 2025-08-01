@@ -1,5 +1,6 @@
 'use client';
-import { Button, Form, Input, Typography } from 'antd';
+import { useEffect } from 'react';
+import { Button, Form, Input, Typography, Spin, message } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useStyles } from '../signup/styles/styles';
 import type { FormProps } from "antd";
@@ -12,7 +13,13 @@ const { Title } = Typography;
 const SignInPage = () => {
   const { styles } = useStyles();
   const { loginUser } = useAuthActions();
-  const { isError } = useAuthState();
+  const { isError, isPending } = useAuthState();
+
+  useEffect(() => {
+  if (isError) {
+    message.error('Login failed. Please check your credentials.');
+  }
+}, [isError]);
 
   const onFinish: FormProps<IUser>['onFinish'] = async (values) => {
     const newUser: IUser = {
@@ -20,12 +27,10 @@ const SignInPage = () => {
       password: values.password
     };
     loginUser(newUser);
-
+     message.success('Login Successful');
   };
 
-  if (isError) {
-    return (<div>Login Error</div>);
-  }
+  
 
   return (
     <div className={styles.container}>
@@ -34,54 +39,59 @@ const SignInPage = () => {
           Login to your Account
         </Title>
 
-        <Form
-          layout="vertical"
-          className={styles.form}
-          onFinish={onFinish}
-          requiredMark={false}
-        >
-          <Form.Item
-            name="userNameOrEmailAddress"
-            rules={[
-              { required: true, message: 'Please enter your email' }
-            ]}
-          >
-            <Input
-              size="large"
-              placeholder="username or email"
-              style={{ color: '#000000' }}
-              prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
-            />
-          </Form.Item>
+        <div>
+          <div className={styles.formWrapper}>
+            {isPending && (
+              <div className={styles.spinnerOverlay}>
+                <Spin size="large" />
+              </div>
+            )}
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Please enter a password' }]}
-          >
-            <Input.Password
-              size="large"
-              placeholder="••••••••"
-              style={{ color: '#000000' }}
-              prefix={<LockOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
-            />
-          </Form.Item>
+            <Form
+              layout="vertical"
+              onFinish={onFinish}
+              requiredMark={false}
+            >
+              <Form.Item
+                name="userNameOrEmailAddress"
+                rules={[{ required: true, message: 'Please enter your email' }]}
+              >
+                <Input
+                  size="large"
+                  placeholder="username or email"
+                  style={{ color: '#000000' }}
+                  prefix={<MailOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
+                />
+              </Form.Item>
 
-          <Form.Item>
+              <Form.Item
+                name="password"
+                rules={[{ required: true, message: 'Please enter a password' }]}
+              >
+                <Input.Password
+                  size="large"
+                  placeholder="••••••••"
+                  style={{ color: '#000000' }}
+                  prefix={<LockOutlined style={{ color: '#999', paddingRight: '0.5rem' }} />}
+                />
+              </Form.Item>
 
+              <Form.Item>
+                <Button htmlType="submit" type="primary" className={styles.submitBtn}>
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
 
-            <Button htmlType="submit" type="primary" className={styles.submitBtn}>
-              Login
-            </Button>
-
-          </Form.Item>
-        </Form>
-
-        <div className={styles.footerText}>
-          Dont have an account?{' '}
-          <Link href="/signup">
-            <strong>Signup</strong>
-          </Link>
+            <div className={styles.footerText}>
+              Don’t have an account?{' '}
+              <Link href="/signup">
+                <strong>Signup</strong>
+              </Link>
+            </div>
+          </div>
         </div>
+
       </div>
       <div className={`${styles.shape} ${styles.circle}`} />
       <div className={`${styles.shape} ${styles.square}`} />
