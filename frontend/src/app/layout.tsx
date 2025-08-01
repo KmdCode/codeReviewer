@@ -1,11 +1,11 @@
+// app/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { theme } from "antd/es";
 import ConfigProvider from "antd/es/config-provider";
 import { AuthProvider } from "@/providers/auth-providers";
 import { ReviewProvider } from "@/providers/review-provider";
-
+import { App } from "antd";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { darkAlgorithm } = theme;
+
   return (
     <html lang="en">
-      <AuthProvider>
-        <ReviewProvider>
+      <body>
         <ConfigProvider
           theme={{
             token: {
@@ -37,12 +37,13 @@ export default function RootLayout({
             algorithm: darkAlgorithm,
           }}
         >
-          <body>
-            {children}
-          </body>
+          <App>
+            <AuthProvider>
+              <ReviewProvider>{children}</ReviewProvider>
+            </AuthProvider>
+          </App>
         </ConfigProvider>
-        </ReviewProvider>
-      </AuthProvider>
+      </body>
     </html>
   );
 }

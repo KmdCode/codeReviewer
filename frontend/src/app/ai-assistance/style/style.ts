@@ -122,4 +122,5 @@ export const useStyles = createStyles(() => ({
     right: 20%;
     transform: rotate(-10deg);
   `,
+  
 }));

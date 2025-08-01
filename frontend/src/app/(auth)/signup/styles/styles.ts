@@ -78,4 +78,29 @@ export const useStyles = createStyles(({ token }) => ({
     right: 20%;
     transform: rotate(-10deg);
   `,
+  spinnerWrapper: css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; // or 100% if replacing the full card
+  width: 100%;
+`,
+formWrapper: css`
+  position: relative;
+`,
+
+spinnerOverlay: css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.6); /* light overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  border-radius: 1.5rem;
+`,
+
 }));
