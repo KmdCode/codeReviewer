@@ -46,4 +46,42 @@ export const useStyles = createStyles(({ token }) => ({
     box-shadow: 0 0.375rem 1rem rgba(0, 0, 0, 0.06);
     padding: 1.25rem;
   `,
+  shape: css`
+    position: absolute;
+    opacity: 0.1;
+    z-index: 1;
+  `,
+  circle: css`
+    width: 120px;
+    height: 120px;
+    background: #13c2c2;
+    border-radius: 50%;
+    top: 20px;
+    left: 30px;
+  `,
+  square: css`
+    width: 100px;
+    height: 100px;
+    background: #722ed1;
+    top: 60%;
+    left: 5%;
+    transform: rotate(15deg);
+  `,
+  triangle: css`
+    width: 0;
+    height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 100px solid #fa8c16;
+    bottom: 80px;
+    right: 50px;
+  `,
+  rectangle: css`
+    width: 160px;
+    height: 40px;
+    background: #2f54eb;
+    top: 80%;
+    right: 20%;
+    transform: rotate(-10deg);
+  `,
 }));

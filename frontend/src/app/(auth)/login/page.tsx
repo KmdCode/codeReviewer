@@ -68,10 +68,10 @@ const SignInPage = () => {
 
           <Form.Item>
 
-         
-              <Button htmlType="submit" type="primary" className={styles.submitBtn}>
-                Login
-              </Button>
+
+            <Button htmlType="submit" type="primary" className={styles.submitBtn}>
+              Login
+            </Button>
 
           </Form.Item>
         </Form>
@@ -83,6 +83,10 @@ const SignInPage = () => {
           </Link>
         </div>
       </div>
+      <div className={`${styles.shape} ${styles.circle}`} />
+      <div className={`${styles.shape} ${styles.square}`} />
+      <div className={`${styles.shape} ${styles.triangle}`} />
+      <div className={`${styles.shape} ${styles.rectangle}`} />
     </div>
   );
 }
