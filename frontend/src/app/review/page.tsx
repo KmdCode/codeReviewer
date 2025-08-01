@@ -20,7 +20,7 @@ const ReviewPage = () => {
     const [language, setLanguage] = useState('typescript');
     const [reviewType, setReviewType] = useState('static');
     const { analyzeCSharpCode } = useReviewActions();
-    const {isPending, review } = useReviewState();
+    const { isPending, review } = useReviewState();
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<Violation[]>([]);
@@ -45,7 +45,7 @@ const ReviewPage = () => {
         reader.readAsText(file as Blob);
     };
 
-    const handleReview = () => {
+    const handleReview = async () => {
         if (!code?.trim()) {
             message.warning('Please enter or upload code before reviewing.');
             return;
@@ -61,6 +61,27 @@ const ReviewPage = () => {
             analyzeCSharpCode(code);
             console.log("Review: ", review);
 
+        }
+        else if (reviewType === "ai") {
+            try {
+                const res = await fetch("/api/ai-review", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code, language }),
+                });
+
+                const data = await res.json();
+
+                if (data.violations) {
+                    setResults(data.violations);
+                    message.success("AI review completed!");
+                } else {
+                    message.error("Failed to retrieve AI results");
+                }
+            } catch (err) {
+                console.error(err);
+                message.error("AI review failed");
+            }
         }
         else {
             console.log("AI Review");
@@ -175,7 +196,7 @@ const ReviewPage = () => {
                         onChange={(e) => setReviewType(e.target.value)}
                     >
                         <Radio.Button value="static">Static</Radio.Button>
-                        <Radio.Button disabled value="ai">AI</Radio.Button>
+                        <Radio.Button value="ai">AI</Radio.Button>
                     </Radio.Group>
 
                     <Button type="primary" size="large" onClick={handleReview}>
