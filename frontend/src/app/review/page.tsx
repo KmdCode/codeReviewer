@@ -4,12 +4,13 @@ import { Button, Select, Radio, Typography, Upload, message, List, Spin } from '
 import { UploadOutlined, OpenAIOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { useStyles } from './style/style';
-import type { UploadFile } from 'antd/es/upload/interface';
+// import type { UploadFile } from 'antd/es/upload/interface';
 import Navbar from '@/components/navbar/Navbar';
 import { analyzeCode, Violation } from '@/utils/analyzer/staticAnalyzer';
 import type { UploadRequestOption, UploadRequestFile } from 'rc-upload/lib/interface';
 import { useReviewActions, useReviewState } from '@/providers/review-provider';
-import { ICode } from '@/providers/review-provider/context';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const { Title } = Typography;
 
@@ -19,11 +20,10 @@ const ReviewPage = () => {
     const [language, setLanguage] = useState('typescript');
     const [reviewType, setReviewType] = useState('static');
     const { analyzeCSharpCode } = useReviewActions();
-    const { isError, isPending, review } = useReviewState();
+    const {isPending, review } = useReviewState();
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<Violation[]>([]);
-    const [cSharp, setCSharp] = useState();
 
     const handleFileUpload = (options: UploadRequestOption<UploadRequestFile>) => {
         const { file, onError } = options;
@@ -66,6 +66,58 @@ const ReviewPage = () => {
             console.log("AI Review");
         }
     };
+
+    const exportReviewAsPDF = () => {
+        if (!review || review.length === 0) {
+            message.warning("No review results to export.");
+            return;
+        }
+
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Code Review Results", 14, 22);
+
+        const tableData = review.map(item => {
+            const line = item.line !== undefined ? item.line : '';
+            const message = item.message !== undefined ? item.message : '';
+            return [line, message];
+        });
+
+        autoTable(doc, {
+            startY: 30,
+            head: [["Line", "Message"]],
+            body: tableData,
+        });
+
+        doc.save("csharp-review-results.pdf");
+    };
+
+    const exportReviewAsTsPDF = () => {
+        if (!results || results.length === 0) {
+            message.warning("No results results to export.");
+            return;
+        }
+
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Code Review Results", 14, 22);
+
+        const tableData = results.map(item => {
+            const line = item.line !== undefined ? item.line : '';
+            const message = item.message !== undefined ? item.message : '';
+            return [line, message, code];
+        });
+
+        autoTable(doc, {
+            startY: 30,
+            head: [["Line", "Message"]],
+            body: tableData,
+        });
+        doc.save("typescript-review-results.pdf");
+    };
+
 
     return (
         <>
@@ -147,7 +199,7 @@ const ReviewPage = () => {
                         />
 
                         <div className={styles.resultActions}>
-                            <Button>Export</Button>
+                            <Button onClick={exportReviewAsTsPDF}>Export</Button>
                             <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
                         </div>
                     </div>
@@ -168,7 +220,7 @@ const ReviewPage = () => {
                                 )}
                             />
                             <div className={styles.resultActions}>
-                                <Button>Export</Button>
+                                <Button onClick={exportReviewAsPDF}>Export</Button>
                                 <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
                             </div>
                         </div>
