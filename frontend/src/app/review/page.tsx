@@ -11,6 +11,7 @@ import type { UploadRequestOption, UploadRequestFile } from 'rc-upload/lib/inter
 import { useReviewActions, useReviewState } from '@/providers/review-provider';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import AIImprovedCodeModal from '@/components/modals/AIImprovedCodeModal';
 
 const { Title } = Typography;
 
@@ -24,6 +25,10 @@ const ReviewPage = () => {
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<Violation[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isBreakdownVisible, setIsBreakdownVisible] = useState(false);
+    const [improvedCode, setImprovedCode] = useState('');
+
 
     const handleFileUpload = (options: UploadRequestOption<UploadRequestFile>) => {
         const { file, onError } = options;
@@ -52,8 +57,10 @@ const ReviewPage = () => {
         }
 
         if (reviewType === "static" && language === "typescript") {
+            setIsLoading(true);
             const issues = analyzeCode(code);
             setResults(issues);
+            setIsLoading(false);
             console.log(issues);
         }
         else if (reviewType === "static" && language === "csharp") {
@@ -63,6 +70,7 @@ const ReviewPage = () => {
 
         }
         else if (reviewType === "ai") {
+            setIsLoading(true);
             try {
                 const res = await fetch("/api/ai-review", {
                     method: "POST",
@@ -82,6 +90,8 @@ const ReviewPage = () => {
                 console.error(err);
                 message.error("AI review failed");
             }
+
+            setIsLoading(false);
         }
         else {
             console.log("AI Review");
@@ -137,6 +147,30 @@ const ReviewPage = () => {
             body: tableData,
         });
         doc.save("typescript-review-results.pdf");
+    };
+
+    const handleAIBreakdown = async () => {
+        // try {
+        //     const res = await fetch("/api/ai-improve", {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({ code, language }),
+        //     });
+
+        //     const data = await res.json();
+
+        //     if (data?.improvedCode) {
+        //         setImprovedCode(data.improvedCode);
+        //         setIsBreakdownVisible(true);
+        //     } else {
+        //         message.error("Failed to get improved code.");
+        //     }
+        // } catch (err) {
+        //     console.error(err);
+        //     message.error("AI breakdown failed.");
+        // }
+        setIsBreakdownVisible(true);
+        console.log("Improved code");
     };
 
 
@@ -204,27 +238,29 @@ const ReviewPage = () => {
                     </Button>
                 </div>
 
-                {results && results.length > 0 && (
-                    <div className={styles.results}>
-                        <Title level={4}>Review Results</Title>
+                <Spin spinning={isLoading} tip="Reviewing code..." size="large">
+                    {results && results.length > 0 && (
+                        <div className={styles.results}>
+                            <Title level={4}>Review Results</Title>
 
-                        <List
-                            bordered
-                            dataSource={results}
-                            className={styles.resultBox}
-                            renderItem={(item) => (
-                                <List.Item>
-                                    <strong>Line {item.line}</strong>: {item.message}
-                                </List.Item>
-                            )}
-                        />
+                            <List
+                                bordered
+                                dataSource={results}
+                                className={styles.resultBox}
+                                renderItem={(item) => (
+                                    <List.Item>
+                                        <strong>Line {item.line}</strong>: {item.message}
+                                    </List.Item>
+                                )}
+                            />
 
-                        <div className={styles.resultActions}>
-                            <Button onClick={exportReviewAsTsPDF}>Export</Button>
-                            <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
+                            <div className={styles.resultActions}>
+                                <Button onClick={exportReviewAsTsPDF}>Export</Button>
+                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>AI Breakdown</Button>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </Spin>
 
                 <Spin spinning={isPending} tip="Reviewing code..." size="large">
                     {review && review.length > 0 && (
@@ -242,14 +278,21 @@ const ReviewPage = () => {
                             />
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsPDF}>Export</Button>
-                                <Button icon={<OpenAIOutlined />}>AI Breakdown</Button>
+                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>AI Breakdown</Button>
                             </div>
                         </div>
                     )}
                 </Spin>
-
-
+                <AIImprovedCodeModal
+                    open={isBreakdownVisible}
+                    onClose={() => setIsBreakdownVisible(false)}
+                    code={improvedCode}
+                    language={language}
+                    editorTheme={editorTheme}
+                />
             </div>
+
+
         </>
     );
 }
