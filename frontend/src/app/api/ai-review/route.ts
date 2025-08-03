@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-console.log(process.env.GEMINI_API_KEY); // should not be undefined
+console.log(process.env.GEMINI_API_KEY);
 
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest) => {
+
   try {
     const { code, language } = await req.json();
 

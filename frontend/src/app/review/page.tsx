@@ -150,28 +150,27 @@ const ReviewPage = () => {
     };
 
     const handleAIBreakdown = async () => {
-        // try {
-        //     const res = await fetch("/api/ai-improve", {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify({ code, language }),
-        //     });
+        try {
+            const res = await fetch("/api/ai-improved-code", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code, language }),
+            });
 
-        //     const data = await res.json();
+            const data = await res.json();
 
-        //     if (data?.improvedCode) {
-        //         setImprovedCode(data.improvedCode);
-        //         setIsBreakdownVisible(true);
-        //     } else {
-        //         message.error("Failed to get improved code.");
-        //     }
-        // } catch (err) {
-        //     console.error(err);
-        //     message.error("AI breakdown failed.");
-        // }
-        setIsBreakdownVisible(true);
-        console.log("Improved code");
+            if (data?.improvedCode) {
+                setImprovedCode(data.improvedCode);
+                setIsBreakdownVisible(true);
+            } else {
+                message.error("Failed to get improved code.");
+            }
+        } catch (err) {
+            console.error(err);
+            message.error("AI breakdown failed.");
+        }
     };
+
 
 
     return (
@@ -256,7 +255,7 @@ const ReviewPage = () => {
 
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsTsPDF}>Export</Button>
-                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>AI Breakdown</Button>
+                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
                             </div>
                         </div>
                     )}
@@ -278,7 +277,7 @@ const ReviewPage = () => {
                             />
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsPDF}>Export</Button>
-                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>AI Breakdown</Button>
+                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
                             </div>
                         </div>
                     )}
