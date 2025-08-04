@@ -20,7 +20,6 @@ const AssistantPage = () => {
     const [loading, setLoading] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
-
     const scrollToBottom = () => {
         const container = chatContainerRef.current;
         if (container) {
@@ -28,33 +27,43 @@ const AssistantPage = () => {
         }
     };
 
-
     useEffect(scrollToBottom, [messages]);
 
     const sendMessage = async () => {
-        if (!input.trim()) return;
-        const userMsg: Message = { role: 'user', text: input };
-        setMessages((prev) => [...prev, userMsg]);
-        setInput('');
-        setLoading(true);
+    if (!input.trim()) return;
+    const userMsg: Message = { role: 'user', text: input };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput('');
+    setLoading(true);
 
-        setTimeout(() => {
-            const assistantMsg: Message = {
-                role: 'assistant',
-                text: 'Here’s my explanation for your code:',
-            };
-            setMessages((prev) => [...prev, assistantMsg]);
-            setLoading(false);
-        }, 1000);
-    };
+    try {
+        const res = await fetch('/api/ai-assistant', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: input }),
+        });
+
+        const data = await res.json();
+
+        const assistantMsg: Message = {
+            role: 'assistant',
+            text: data.reply || 'Sorry, I could not generate a response.',
+        };
+        setMessages((prev) => [...prev, assistantMsg]);
+    } catch (error) {
+        console.error('Error sending message:', error);
+        setMessages((prev) => [...prev, { role: 'assistant', text: 'Error contacting AI.' }]);
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <>
             <Navbar />
-
             <div className={styles.page}>
                 <div className={styles.container}>
-                    <Title level={2} className={styles.title}>AI Assistance</Title>
+                    <Title level={2} className={styles.title}>AI Assistant</Title>
                     <div ref={chatContainerRef} className={styles.chatContainer}>
                         {messages.map((msg, idx) => (
                             <div key={idx} className={msg.role === 'user' ? styles.userMsg : styles.aiMsg}>
