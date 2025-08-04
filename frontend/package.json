@@ -11,6 +11,9 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@monaco-editor/react": "^4.7.0",
+    "@octokit/app": "^16.0.1",
+    "@octokit/rest": "^22.0.0",
+    "@octokit/webhooks": "^14.1.3",
     "antd": "^5.26.6",
     "antd-style": "^3.7.1",
     "axios": "^1.11.0",
