@@ -1,27 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <AssemblyName>CodeReviewer.Migrator</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>CodeReviewer.Migrator</PackageId>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Update="appsettings.json;log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Abp.Castle.Log4Net" Version="9.4.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-    <PackageReference Include="Npgsql" Version="8.0.7" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CodeReviewer.Core\CodeReviewer.Core.csproj" />
-    <ProjectReference Include="..\CodeReviewer.EntityFrameworkCore\CodeReviewer.EntityFrameworkCore.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+		<AssemblyName>CodeReviewer.Migrator</AssemblyName>
+		<OutputType>Exe</OutputType>
+		<PackageId>CodeReviewer.Migrator</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Update="appsettings.json;log4net.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Abp.Castle.Log4Net" Version="9.4.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\CodeReviewer.Core\CodeReviewer.Core.csproj" />
+		<ProjectReference Include="..\CodeReviewer.EntityFrameworkCore\CodeReviewer.EntityFrameworkCore.csproj" />
+	</ItemGroup>
 </Project>

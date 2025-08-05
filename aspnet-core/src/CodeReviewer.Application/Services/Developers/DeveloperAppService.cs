@@ -5,9 +5,6 @@ using CodeReviewer.Domain.Developers;
 using CodeReviewer.Services.Developers.Dto;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CodeReviewer.Services.Developers
