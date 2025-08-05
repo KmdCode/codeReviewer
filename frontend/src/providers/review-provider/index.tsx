@@ -11,7 +11,7 @@ export const ReviewProvider = ({ children }: { children: React.ReactNode }) => {
     const instance = axiosInstance;
 
 
-    const analyzeCSharpCode = async (code: string) => {
+    const analyzeCSharpCode= async (code: string) => {
         dispatch(analyzeCSharpCodePending());
 
         const endpoint: string = '/services/app/StaticAnalyzer/Analyze';
