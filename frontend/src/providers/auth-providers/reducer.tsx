@@ -26,5 +26,17 @@ export const AuthReducer = handleActions<IAuthStateContext, IAuthStateContext>({
     [AuthActionEnums.loginUserError]: (state, action) => ({
         ...state,
         ...action.payload,
-    })
+    }),
+    [AuthActionEnums.getDeveloperProfilePending]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [AuthActionEnums.getDeveloperProfileSuccess]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [AuthActionEnums.getDeveloperProfileError]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
 }, INITIAL_STATE)

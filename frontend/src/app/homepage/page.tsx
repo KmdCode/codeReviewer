@@ -1,14 +1,25 @@
 'use client';
+import React, {useEffect} from 'react';
 import { Typography, Button, Row, Col, Card } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useStyles } from './styles/style';
 import Navbar from '@/components/navbar/Navbar';
+import { useAuthActions, useAuthState } from '@/providers/auth-providers';
 
 const { Title, Paragraph } = Typography;
 
 const HomePage = () => {
   const { styles } = useStyles();
+  const {profile} = useAuthState();
+  const {getDeveloperProfile} = useAuthActions();
+
+
+  useEffect(() => {
+    getDeveloperProfile();
+    
+    console.log("profile", profile)
+  },[])
 
   return (
     <>

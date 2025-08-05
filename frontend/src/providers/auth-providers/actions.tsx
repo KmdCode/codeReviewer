@@ -12,6 +12,11 @@ export enum AuthActionEnums {
     loginUserSuccess = "LOGIN_USER_SUCCESS",
     loginUserError = "LOGIN_USER_ERROR",
 
+    //getDeveloperProfile
+    getDeveloperProfilePending = "GET_DEVELOPER_PROFILE_PENDING",
+    getDeveloperProfileSuccess = "GET_DEVELOPER_PROFILE_SUCCESS",
+    getDeveloperProfileError = "GET_DEVELOPER_PROFILE_ERROR",
+
 }
 
 export const registerDeveloperPending = createAction<IAuthStateContext>(
@@ -68,6 +73,37 @@ export const loginUserSuccess = createAction<IAuthStateContext, IUser>(
 
 export const loginUserError = createAction<IAuthStateContext>(
     AuthActionEnums.loginUserError, () => (
+        {
+            isPending: false,
+            isSuccess: false,
+            isError: true
+        }
+    )
+)
+
+export const getDeveloperProfilePending = createAction<IAuthStateContext>(
+    AuthActionEnums.getDeveloperProfilePending, () => (
+        {
+            isPending: true,
+            isSuccess: false,
+            isError: false
+        }
+    )
+)
+
+export const getDeveloperProfileSuccess = createAction<IAuthStateContext, IUser>(
+    AuthActionEnums.getDeveloperProfileSuccess, (profile: IUser) => (
+        {
+            isPending: false,
+            isSuccess: true,
+            isError: false,
+            profile
+        }
+    )
+)
+
+export const getDeveloperProfileError = createAction<IAuthStateContext>(
+    AuthActionEnums.getDeveloperProfileError, () => (
         {
             isPending: false,
             isSuccess: false,
