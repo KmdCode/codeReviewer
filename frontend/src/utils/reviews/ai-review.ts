@@ -26,7 +26,6 @@ ${code}
     const start = text.indexOf('[');
     const end = text.lastIndexOf(']');
     const jsonString = text.slice(start, end + 1);
-    // const violations = JSON.parse(jsonString);
 
     return JSON.parse(jsonString);
 }
