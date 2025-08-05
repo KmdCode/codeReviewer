@@ -76,7 +76,7 @@ webhooks.on(['pull_request.opened', 'pull_request.synchronize'], async ({ payloa
                 owner,
                 repo,
                 issue_number: prNumber,
-                body: `🧠 AI Review for \`${file.filename}\`:\n${formattedAiReview}`,
+                body: ` AI Review for \`${file.filename}\`:\n${formattedAiReview}`,
             });
         }
     } catch (err) {
