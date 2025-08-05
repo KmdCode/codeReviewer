@@ -5,13 +5,16 @@ import { INITIAL_STATE, IUser, AuthStateContext, AuthActionContext } from "./con
 import { AuthReducer } from "./reducer";
 import { AbpTokenProperies, decodeToken } from "@/utils/jwt";
 import { useRouter } from "next/navigation";
-import { 
-    registerDeveloperPending, 
-    registerDeveloperSuccess, 
-    registerDeveloperError, 
+import {
+    getDeveloperProfilePending,
+    getDeveloperProfileSuccess,
+    getDeveloperProfileError,
+    registerDeveloperPending,
+    registerDeveloperSuccess,
+    registerDeveloperError,
     loginUserPending,
     loginUserSuccess,
-    loginUserError
+    loginUserError,
 } from "./actions";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -38,29 +41,44 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch(loginUserPending());
         const endpoint = `/TokenAuth/Authenticate`;
 
-        await instance
-    .post(endpoint, user)
-    .then((response) => {
-      const token = response.data.result.accessToken;
+        await instance.post(endpoint, user)
+            .then((response) => {
+                const token = response.data.result.accessToken;
 
-      const decoded = decodeToken(token);
-      const userRole = decoded[AbpTokenProperies.role];
+                const decoded = decodeToken(token);
+                const userRole = decoded[AbpTokenProperies.role];
 
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("role", userRole);
+                sessionStorage.setItem("token", token);
+                sessionStorage.setItem("role", userRole);
 
-      dispatch(loginUserSuccess(token));
-      router.push('/homepage');
-    })
-    .catch((error) => {
-      console.error(error);
-      dispatch(loginUserError());
-    });
+                dispatch(loginUserSuccess(token));
+                router.push('/homepage');
+            })
+            .catch((error) => {
+                console.error(error);
+                dispatch(loginUserError());
+            });
+    }
+
+    const getDeveloperProfile = async () => {
+        dispatch(getDeveloperProfilePending());
+
+        const endpoint: string = '/services/app/Developer/getDeveloperProfile';
+
+        await instance.get(endpoint)
+            .then((response) => {
+                dispatch(getDeveloperProfileSuccess(response.data.result))
+                sessionStorage.setItem("userId", response.data.result.id)
+                console.log("Details", response.data.result)
+            }).catch((error) => {
+                dispatch(getDeveloperProfileError())
+                console.error(error.message);
+            })
     }
 
     return (
         <AuthStateContext.Provider value={state}>
-            <AuthActionContext.Provider value={{ registerDeveloper, loginUser}}>
+            <AuthActionContext.Provider value={{ registerDeveloper, loginUser, getDeveloperProfile}}>
                 {children}
             </AuthActionContext.Provider>
         </AuthStateContext.Provider>

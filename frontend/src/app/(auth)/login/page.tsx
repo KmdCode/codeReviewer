@@ -12,25 +12,27 @@ const { Title } = Typography;
 
 const SignInPage = () => {
   const { styles } = useStyles();
-  const { loginUser } = useAuthActions();
-  const { isError, isPending } = useAuthState();
+  const { loginUser, getDeveloperProfile } = useAuthActions();
+  const { isError, isPending, profile } = useAuthState();
 
   useEffect(() => {
-  if (isError) {
-    message.error('Login failed. Please check your credentials.');
-  }
-}, [isError]);
+    if (isError) {
+      message.error('Login failed. Please check your credentials.');
+    }
+  }, [isError]);
+
 
   const onFinish: FormProps<IUser>['onFinish'] = async (values) => {
     const newUser: IUser = {
       userNameOrEmailAddress: values.userNameOrEmailAddress,
       password: values.password
     };
-    loginUser(newUser);
-     message.success('Login Successful');
+    await loginUser(newUser);
+    await getDeveloperProfile();
+    message.success('Login Successful');
   };
 
-  
+
 
   return (
     <div className={styles.container}>
