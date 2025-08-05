@@ -73,4 +73,29 @@ export const useStyles = createStyles(({ token }) => ({
     cursor: pointer;
     color: #fa541c;
   `,
+    profileDrawer: css`
+    padding: 1rem;
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: #444;
+
+      strong {
+        color: #000;
+      }
+    }
+
+    button {
+      margin-top: 1rem;
+      background-color: #fa541c;
+      border-color: #fa541c;
+
+      &:hover {
+        background-color: #e24e1f;
+        border-color: #e24e1f;
+      }
+    }
+  `,
+
 }));

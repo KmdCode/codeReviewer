@@ -12,7 +12,8 @@ namespace CodeReviewer.Services.Developers.Dto
     [AutoMap(typeof(Developer))]
     public class UpdateDeveloperDto : EntityDto<Guid>
     {
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        
     }
 }
