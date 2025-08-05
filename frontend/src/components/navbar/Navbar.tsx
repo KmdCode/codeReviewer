@@ -10,15 +10,28 @@ const menuItems = [
   { label: 'Review', key: '/review' },
   { label: 'Saved', key: '/saved-reviews' },
   { label: 'AI Assistance', key: '/ai-assistance' },
-  { label: 'Profile', key: '/profile' },
 ];
+
+const user = {
+  name: 'Karabo Modise',
+  email: 'karabo@example.com',
+};
 
 const Navbar = () => {
   const { styles, cx } = useStyles();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
+
+  const openProfileDrawer = () => {
+    setProfileDrawerOpen(true);
+  };
+
+  const closeProfileDrawer = () => {
+    setProfileDrawerOpen(false);
+  };
 
   return (
     <header className={styles.navbar}>
@@ -37,6 +50,14 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
+          {/* Profile button */}
+          <span
+            onClick={openProfileDrawer}
+            className={styles.menuItem}
+            style={{ cursor: 'pointer' }}
+          >
+            Profile
+          </span>
         </nav>
       ) : (
         <>
@@ -58,10 +79,17 @@ const Navbar = () => {
                 </Link>
               </div>
             ))}
+            {/* Mobile Profile Link (Drawer) */}
+            <div style={{ marginBottom: '1.2rem', cursor: 'pointer' }} onClick={() => {
+              setOpen(false);
+              openProfileDrawer();
+            }}>
+              <span className={styles.menuItem}>Profile</span>
+            </div>
+
             <Link href={'/'}>
               <Button className={styles.logoutBtn} block>
                 Logout
-                
               </Button>
             </Link>
           </Drawer>
@@ -69,8 +97,22 @@ const Navbar = () => {
       )}
 
       {!isMobile && <Button className={styles.logoutBtn}>Logout</Button>}
+
+      {/* Profile Drawer */}
+      <Drawer
+        title="User Profile"
+        placement="right"
+        onClose={closeProfileDrawer}
+        open={profileDrawerOpen}
+      >
+        <div className={styles.profileDrawer}>
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <Button type="primary" block>Edit Profile</Button>
+        </div>
+      </Drawer>
     </header>
   );
-}
+};
 
 export default Navbar;

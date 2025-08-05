@@ -3,6 +3,7 @@ using Abp.Domain.Repositories;
 using Abp.UI;
 using CodeReviewer.Domain.Developers;
 using CodeReviewer.Services.Developers.Dto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,26 @@ namespace CodeReviewer.Services.Developers
 
                 return input;
             
+        }
+
+        public async Task<GetDeveloperDto> GetDeveloperProfileAsync()
+        {
+            var developer = await _developerRepository
+                .GetAll().
+                Include(s => s.UserAccount).
+                FirstOrDefaultAsync(s => s.UserAccount != null && s.UserAccount.Id == AbpSession.UserId.Value);
+                
+            if (developer == null)
+            {
+                throw new UserFriendlyException("Patient profile not found.");
+            }
+
+            return new GetDeveloperDto
+            {
+                Id = developer.Id,
+                Name = developer.Name,
+                Surname = developer.Surname,
+            };
         }
 
     }
