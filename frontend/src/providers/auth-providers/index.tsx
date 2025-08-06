@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 sessionStorage.setItem("role", userRole);
 
                 dispatch(loginUserSuccess(token));
-                router.push('/homepage');
+                router.push('/developer');
             })
             .catch((error) => {
                 console.error(error);
