@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Select, Radio, Typography, Upload, message, List, Spin } from 'antd';
 import { UploadOutlined, OpenAIOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
@@ -9,6 +9,7 @@ import Navbar from '@/components/navbar/Navbar';
 import { analyzeCode, Violation } from '@/utils/analyzer/staticAnalyzer';
 import type { UploadRequestOption, UploadRequestFile } from 'rc-upload/lib/interface';
 import { useReviewActions, useReviewState } from '@/providers/review-provider';
+import { useAuthActions} from '@/providers/auth-providers';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import AIImprovedCodeModal from '@/components/modals/AIImprovedCodeModal';
@@ -22,6 +23,7 @@ const ReviewPage = () => {
     const [reviewType, setReviewType] = useState('static');
     const { analyzeCSharpCode } = useReviewActions();
     const { isPending, review } = useReviewState();
+    const { getDeveloperProfile } = useAuthActions();
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
     const [results, setResults] = useState<Violation[]>([]);
@@ -29,6 +31,9 @@ const ReviewPage = () => {
     const [isBreakdownVisible, setIsBreakdownVisible] = useState(false);
     const [improvedCode, setImprovedCode] = useState('');
 
+    useEffect(() => {
+        getDeveloperProfile();
+    }, []);
 
     const handleFileUpload = (options: UploadRequestOption<UploadRequestFile>) => {
         const { file, onError } = options;

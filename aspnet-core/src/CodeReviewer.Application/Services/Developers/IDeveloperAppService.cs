@@ -8,5 +8,6 @@ namespace CodeReviewer.Services.Developers
     public interface IDeveloperAppService : IAsyncCrudAppService<CreateDeveloperDto, Guid, GetDeveloperDto, CreateDeveloperDto, UpdateDeveloperDto>
     {
         Task<GetDeveloperDto> GetDeveloperProfileAsync();
+        Task<UpdateDeveloperDto> UpdateDeveloperAsync(UpdateDeveloperDto dto);
     }
 }

@@ -5,17 +5,14 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { MenuOutlined } from '@ant-design/icons';
 import { useStyles } from './style';
+import { useAuthState } from '@/providers/auth-providers';
+import UpdateProfileModal from '../modals/UpdateProfileModal';
 
 const menuItems = [
   { label: 'Review', key: '/review' },
   { label: 'Saved', key: '/saved-reviews' },
   { label: 'AI Assistance', key: '/ai-assistance' },
 ];
-
-const user = {
-  name: 'Karabo Modise',
-  email: 'karabo@example.com',
-};
 
 const Navbar = () => {
   const { styles, cx } = useStyles();
@@ -24,6 +21,10 @@ const Navbar = () => {
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.md;
+  const { profile } = useAuthState();
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+  const closeEditModal = () => setUpdateModalOpen(false);
+  const openEditModal = () => setUpdateModalOpen(true);
 
   const openProfileDrawer = () => {
     setProfileDrawerOpen(true);
@@ -50,7 +51,7 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
-          {/* Profile button */}
+    
           <span
             onClick={openProfileDrawer}
             className={styles.menuItem}
@@ -98,7 +99,6 @@ const Navbar = () => {
 
       {!isMobile && <Button className={styles.logoutBtn}>Logout</Button>}
 
-      {/* Profile Drawer */}
       <Drawer
         title="User Profile"
         placement="right"
@@ -106,11 +106,14 @@ const Navbar = () => {
         open={profileDrawerOpen}
       >
         <div className={styles.profileDrawer}>
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <Button type="primary" block>Edit Profile</Button>
+          <p><strong>Name:</strong> {profile?.name}</p>
+          <p><strong>Surname:</strong> {profile?.surname}</p>
+          <Button type="primary" block onClick={openEditModal}>Update Profile</Button>
         </div>
       </Drawer>
+      <UpdateProfileModal
+        open={updateModalOpen}
+        onClose={closeEditModal} />
     </header>
   );
 };

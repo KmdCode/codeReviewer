@@ -56,5 +56,29 @@ namespace CodeReviewer.Services.Developers
             };
         }
 
+        public async Task<UpdateDeveloperDto> UpdateDeveloperAsync(UpdateDeveloperDto input)
+        {
+            var developer = await _developerRepository
+                .GetAll()
+                .Include(d => d.UserAccount)
+                .FirstOrDefaultAsync(d => d.UserAccount != null && d.UserAccount.Id == AbpSession.UserId.Value);
+
+            if (developer == null)
+            {
+                throw new UserFriendlyException("Developer profile not found.");
+            }
+
+            developer.Name = input.Name;
+            developer.Surname = input.Surname;
+
+            await _developerRepository.UpdateAsync(developer);
+            return new UpdateDeveloperDto
+            {
+                Id = developer.Id,
+                Name = developer.Name,
+                Surname = developer.Surname
+            };
+        }
+
     }
 }

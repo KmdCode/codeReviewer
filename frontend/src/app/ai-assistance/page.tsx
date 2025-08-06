@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button, Input, Typography, Spin } from 'antd';
 import { useStyles } from './style/style';
-import dynamic from 'next/dynamic';
+import { useAuthActions } from '@/providers/auth-providers';
 import Navbar from '@/components/navbar/Navbar';
 
 const { Title } = Typography;
@@ -19,6 +19,11 @@ const AssistantPage = () => {
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const { getDeveloperProfile } = useAuthActions();
+
+    useEffect(() => {
+        getDeveloperProfile();
+    }, []);
 
     const scrollToBottom = () => {
         const container = chatContainerRef.current;
@@ -30,33 +35,33 @@ const AssistantPage = () => {
     useEffect(scrollToBottom, [messages]);
 
     const sendMessage = async () => {
-    if (!input.trim()) return;
-    const userMsg: Message = { role: 'user', text: input };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
-    setLoading(true);
+        if (!input.trim()) return;
+        const userMsg: Message = { role: 'user', text: input };
+        setMessages((prev) => [...prev, userMsg]);
+        setInput('');
+        setLoading(true);
 
-    try {
-        const res = await fetch('/api/ai-assistant', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: input }),
-        });
+        try {
+            const res = await fetch('/api/ai-assistant', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: input }),
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        const assistantMsg: Message = {
-            role: 'assistant',
-            text: data.reply || 'Sorry, I could not generate a response.',
-        };
-        setMessages((prev) => [...prev, assistantMsg]);
-    } catch (error) {
-        console.error('Error sending message:', error);
-        setMessages((prev) => [...prev, { role: 'assistant', text: 'Error contacting AI.' }]);
-    } finally {
-        setLoading(false);
-    }
-};
+            const assistantMsg: Message = {
+                role: 'assistant',
+                text: data.reply || 'Sorry, I could not generate a response.',
+            };
+            setMessages((prev) => [...prev, assistantMsg]);
+        } catch (error) {
+            console.error('Error sending message:', error);
+            setMessages((prev) => [...prev, { role: 'assistant', text: 'Error contacting AI.' }]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>

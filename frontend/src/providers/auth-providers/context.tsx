@@ -22,6 +22,7 @@ export interface IAuthActionContext {
     registerDeveloper: (user: IUser) => void;
     loginUser: (user: IUser) => void;
     getDeveloperProfile: ()  => void;
+    updateDeveloperProfile: (user: IUser) => void;
 }
 
 export const INITIAL_STATE: IAuthStateContext = {

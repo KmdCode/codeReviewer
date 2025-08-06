@@ -1,9 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Collapse, Typography, Tag, Button, Empty } from 'antd';
 import { useStyles } from './style/style';
 import MonacoEditor from '@monaco-editor/react';
 import Navbar from '@/components/navbar/Navbar';
+import { useAuthActions } from '@/providers/auth-providers';
 
 const { Title, Paragraph } = Typography;
 
@@ -30,6 +31,11 @@ const dummyReviews = [
 
 const SavedReviewsPage = () => {
   const { styles } = useStyles();
+  const { getDeveloperProfile } = useAuthActions();
+
+  useEffect(() => {
+    getDeveloperProfile();
+  }, []);
 
   const renderMeta = (review: typeof dummyReviews[number]) => (
     <div className={styles.metaInfo}>
