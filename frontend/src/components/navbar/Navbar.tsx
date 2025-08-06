@@ -9,9 +9,9 @@ import { useAuthState } from '@/providers/auth-providers';
 import UpdateProfileModal from '../modals/UpdateProfileModal';
 
 const menuItems = [
-  { label: 'Review', key: '/review' },
-  { label: 'Saved', key: '/saved-reviews' },
-  { label: 'AI Assistance', key: '/ai-assistance' },
+  { label: 'Review', key: '/developer/review' },
+  { label: 'Saved', key: '/developer/saved-reviews' },
+  { label: 'AI Assistance', key: '/developer/ai-assistance' },
 ];
 
 const Navbar = () => {
@@ -37,7 +37,7 @@ const Navbar = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.logo}>
-        <Link href="/homepage">FusionReview</Link>
+        <Link href="/developer">FusionReview</Link>
       </div>
 
       {!isMobile ? (
