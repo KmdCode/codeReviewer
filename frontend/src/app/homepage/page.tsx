@@ -5,26 +5,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useStyles } from './styles/style';
 import Navbar from '@/components/navbar/Navbar';
-import { useAuthActions, useAuthState } from '@/providers/auth-providers';
+import { useAuthActions } from '@/providers/auth-providers';
 
 const { Title, Paragraph } = Typography;
 
 const HomePage = () => {
   const { styles } = useStyles();
-  const { profile } = useAuthState();
   const { getDeveloperProfile } = useAuthActions();
 
 
   useEffect(() => {
     getDeveloperProfile();
   }, []);
-
-  useEffect(() => {
-    if (profile) {
-      console.log("Updated profile", profile);
-    }
-  }, [profile]);
-
 
   return (
     <>

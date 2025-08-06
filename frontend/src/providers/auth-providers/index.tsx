@@ -20,7 +20,6 @@ import {
     loginUserSuccess,
     loginUserError,
 } from "./actions";
-import { error } from "node:console";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
@@ -73,8 +72,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await instance.get(endpoint)
             .then((response) => {
                 dispatch(getDeveloperProfileSuccess(response.data.result))
-                sessionStorage.setItem("userId", response.data.result.id)
-                console.log("Details", response.data.result)
             }).catch((error) => {
                 dispatch(getDeveloperProfileError())
                 console.error(error.message);
@@ -84,9 +81,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const updateDeveloperProfile = async (user: IUser) => {
         dispatch(updateDeveloperProfilePending());
 
-        const endpoint: string = '/services/app/Developer/updateDeveloperProfile'
+        const endpoint: string = '/services/app/Developer/updateDeveloper'
 
-        await instance.post(endpoint, user)
+        await instance.put(endpoint, user)
             .then((response) => {
                 dispatch(updateDeveloperProfileSuccess(response.data));
                 console.error("update successful")
