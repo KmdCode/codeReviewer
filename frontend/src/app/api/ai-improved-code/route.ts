@@ -20,6 +20,14 @@ Improve the following ${language} code for:
 - Performance
 - Maintainability
 
+Also be sure to make sure that the following rules are followed:
+- Class PascalCase
+- Const UPPER_CASE (except for TypeScript and JavaScript)
+- Private _camelCase
+- Functions: 
+    -camel case (Pascal for c#)
+    - must declare return type
+
 Return only the improved code without explanations.
 
 Code:

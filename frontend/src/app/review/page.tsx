@@ -176,8 +176,6 @@ const ReviewPage = () => {
         }
     };
 
-
-
     return (
         <>
             <Navbar />
@@ -290,6 +288,7 @@ const ReviewPage = () => {
                 <AIImprovedCodeModal
                     open={isBreakdownVisible}
                     onClose={() => setIsBreakdownVisible(false)}
+                    userCode={code}
                     code={improvedCode}
                     language={language}
                     editorTheme={editorTheme}

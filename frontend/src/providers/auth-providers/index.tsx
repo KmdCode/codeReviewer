@@ -1,7 +1,7 @@
 "use client"
 import { useContext, useReducer } from "react";
 import { axiosInstance } from "@/utils/axiosInstance";
-import { message } from "antd";
+import { message } from "antd/es";
 import { INITIAL_STATE, IUser, AuthStateContext, AuthActionContext } from "./context";
 import { AuthReducer } from "./reducer";
 import { AbpTokenProperies, decodeToken } from "@/utils/jwt";
@@ -33,11 +33,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await instance.post(endpoint, user)
             .then((response) => {
                 dispatch(registerDeveloperSuccess(response.data))
-                router.push('/login')
+                router.push('/login');
             }).catch((error) => {
-                dispatch(registerDeveloperError())
+                dispatch(registerDeveloperError());
                 console.log(error)
                 console.log(error.message)
+                throw error;
             })
     }
 
@@ -75,6 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             }).catch((error) => {
                 dispatch(getDeveloperProfileError())
                 console.error(error.message);
+                throw error;
             })
     }
 

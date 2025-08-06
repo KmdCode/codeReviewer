@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { Button, Form, Input, Typography, Spin, message } from 'antd';
+import useApp from "antd/es/app/useApp";
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useStyles } from '../signup/styles/styles';
 import type { FormProps } from "antd";
@@ -13,7 +14,8 @@ const { Title } = Typography;
 const SignInPage = () => {
   const { styles } = useStyles();
   const { loginUser, getDeveloperProfile } = useAuthActions();
-  const { isError, isPending, profile } = useAuthState();
+  const { isError, isPending } = useAuthState();
+  const app = useApp();
 
   useEffect(() => {
     if (isError) {
@@ -21,18 +23,23 @@ const SignInPage = () => {
     }
   }, [isError]);
 
-
   const onFinish: FormProps<IUser>['onFinish'] = async (values) => {
     const newUser: IUser = {
       userNameOrEmailAddress: values.userNameOrEmailAddress,
       password: values.password
     };
-    await loginUser(newUser);
-    await getDeveloperProfile();
-    message.success('Login Successful');
+
+    try {
+      await loginUser(newUser);
+      await getDeveloperProfile();
+      app.message.success("Login Successful")
+
+    } catch (error) {
+      app.message.error("Incorrect username or password")
+      console.error(error);
+    }
+
   };
-
-
 
   return (
     <div className={styles.container}>

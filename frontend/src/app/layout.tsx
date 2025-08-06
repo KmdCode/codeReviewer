@@ -1,11 +1,10 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
-import { theme } from "antd/es";
+import { theme, App } from "antd/es";
 import ConfigProvider from "antd/es/config-provider";
 import { AuthProvider } from "@/providers/auth-providers";
 import { ReviewProvider } from "@/providers/review-provider";
-import { App } from "antd";
 
 export const metadata: Metadata = {
   title: "Create Next App",
