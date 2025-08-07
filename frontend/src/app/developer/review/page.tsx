@@ -196,11 +196,11 @@ const ReviewPage = () => {
                     reviewName: values.reviewName,
                     language: language,
                     code: code,
-                    reviewResults: review
+                    reviewResults: results
 
                 }
                 saveReview(newReview);
-                setIsModalVisible(false);
+                setIsModalVisibleAI(false);
 
                 form.resetFields();
                 message.success('Review saved successfully!');
@@ -234,7 +234,7 @@ const ReviewPage = () => {
     };
 
     const handleCancel = () => {
-        setIsModalVisible(false);
+        setIsModalVisibleAI(false);
         form.resetFields();
     };
 
@@ -321,7 +321,7 @@ const ReviewPage = () => {
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsTsPDF}>Download Report</Button>
                                 <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
-                                <Button icon={<BookOutlined />} onClick={showModal}>Save Review</Button>
+                                <Button icon={<BookOutlined />} onClick={showModalAI}>Save Review</Button>
                             </div>
                         </div>
                     )}
@@ -344,7 +344,7 @@ const ReviewPage = () => {
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsPDF}>Download Review</Button>
                                 <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
-                                <Button icon={<BookOutlined />} onClick={showModalAI}>Save Review</Button>
+                                <Button icon={<BookOutlined />} onClick={showModal}>Save Review</Button>
                             </div>
                         </div>
                     )}
@@ -361,8 +361,8 @@ const ReviewPage = () => {
 
             <Modal
                 title="Save Review"
-                visible={isModalVisible}
-                onOk={handleAIReview}
+                visible={isModalVisibleAI}
+                onOk={handleStaticReview}
                 onCancel={handleCancel}
                 okText="Save"
                 cancelText="Cancel"
@@ -379,7 +379,7 @@ const ReviewPage = () => {
             </Modal>
             <Modal
                 title="Save Review"
-                visible={isModalVisibleAI}
+                visible={isModalVisible}
                 onOk={handleAIReview}
                 onCancel={handleCancel}
                 okText="Save"
