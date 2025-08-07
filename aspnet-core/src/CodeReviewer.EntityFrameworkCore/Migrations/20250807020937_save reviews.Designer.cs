@@ -3,6 +3,7 @@ using System;
 using CodeReviewer.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeReviewer.Migrations
 {
     [DbContext(typeof(CodeReviewerDbContext))]
-    partial class CodeReviewerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250807020937_save reviews")]
+    partial class savereviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1626,55 +1629,6 @@ namespace CodeReviewer.Migrations
                     b.ToTable("Developers");
                 });
 
-            modelBuilder.Entity("CodeReviewer.Domain.Reviews.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Language")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ReviewName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ReviewResultsJson")
-                        .HasColumnType("text");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Reviews");
-                });
-
             modelBuilder.Entity("CodeReviewer.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1962,17 +1916,6 @@ namespace CodeReviewer.Migrations
                     b.HasOne("CodeReviewer.Authorization.Users.User", "UserAccount")
                         .WithMany()
                         .HasForeignKey("UserAccountId");
-
-                    b.Navigation("UserAccount");
-                });
-
-            modelBuilder.Entity("CodeReviewer.Domain.Reviews.Review", b =>
-                {
-                    b.HasOne("CodeReviewer.Authorization.Users.User", "UserAccount")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("UserAccount");
                 });
