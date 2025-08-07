@@ -7,10 +7,13 @@ export interface ICode {
 }
 
 export interface IReview {
-    reviewName: string;
-    language: string;
-    code: string;
-    reviewResults?: ICode[];
+  id?: string;
+  reviewName: string;
+  language: string;
+  code: string;
+  reviewResults?: ICode[];
+  reviewType?: string;
+  date?: string;
 }
 
 export interface IReviewStateContext {

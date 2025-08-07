@@ -51,7 +51,7 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
-    
+
           <span
             onClick={openProfileDrawer}
             className={styles.menuItem}
@@ -97,7 +97,11 @@ const Navbar = () => {
         </>
       )}
 
-      {!isMobile && <Button className={styles.logoutBtn}>Logout</Button>}
+      {!isMobile && <Link href={'/'}>
+        <Button className={styles.logoutBtn} block>
+          Logout
+        </Button>
+      </Link>}
 
       <Drawer
         title="User Profile"

@@ -1,51 +1,40 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Collapse, Typography, Tag, Button, Empty } from 'antd';
 import { useStyles } from './style/style';
 import MonacoEditor from '@monaco-editor/react';
 import Navbar from '@/components/navbar/Navbar';
 import { useAuthActions } from '@/providers/auth-providers';
+import { useReviewActions, useReviewState } from '@/providers/review-provider';
+import { IReview } from '@/providers/review-provider/context';
 
 const { Title, Paragraph } = Typography;
-
-const dummyReviews = [
-  {
-    id: 1,
-    title: 'Login Service - Bug Fix',
-    code: `public class LoginService { /* ... */ }`,
-    results: 'AI found 3 suggestions to improve null handling and async usage.',
-    language: 'csharp',
-    type: 'AI',
-    date: '2025-07-29',
-  },
-  {
-    id: 2,
-    title: 'User Dashboard UI',
-    code: `const Dashboard = () => { return <div>Hello</div>; }`,
-    results: 'Static analysis flagged an unused variable.',
-    language: 'typescript',
-    type: 'Static',
-    date: '2025-07-27',
-  },
-];
 
 const SavedReviewsPage = () => {
   const { styles } = useStyles();
   const { getDeveloperProfile } = useAuthActions();
+  const { getSavedReviews } = useReviewActions();
+  const { myReviews } = useReviewState();
 
   useEffect(() => {
     getDeveloperProfile();
   }, []);
 
-  const renderMeta = (review: typeof dummyReviews[number]) => (
+  useEffect(() => {
+    getSavedReviews();
+    console.log("review");
+  }, []);
+
+  const renderMeta = (review: IReview) => (
     <div className={styles.metaInfo}>
       <Tag color={review.language === 'csharp' ? 'blue' : 'volcano'}>
         {review.language.toUpperCase()}
       </Tag>
-      <Tag color={review.type === 'AI' ? 'green' : 'geekblue'}>
-        {review.type} Review
+      <Tag color={review.reviewType === 'AI' ? 'green' : 'geekblue'}>
+        {review.reviewType || 'AI'} Review
       </Tag>
-      <span className="date">{review.date}</span>
+      
+      {review.date && <span className="date">{review.date}</span>}
     </div>
   );
 
@@ -61,30 +50,30 @@ const SavedReviewsPage = () => {
             </Paragraph>
           </div>
 
-          {dummyReviews.length === 0 ? (
+          {!myReviews || myReviews.length === 0 ? (
             <Empty description="No saved reviews yet">
-              <Button type="primary" href="/review">
+              <Button type="primary" href="/developer/review">
                 Run your first review
               </Button>
             </Empty>
           ) : (
             <Collapse accordion className={styles.collapse}>
-              {dummyReviews.map((review) => (
+              {myReviews.map((review) => (
                 <Collapse.Panel
                   header={
                     <div className={styles.reviewHeader}>
-                      <strong>{review.title}</strong>
+                      <strong>{review.reviewName}</strong>
                       {renderMeta(review)}
                     </div>
                   }
-                  key={review.id}
+                  key={review.id || review.reviewName}
                 >
                   <div className={styles.editorWrapper}>
                     <MonacoEditor
                       height="300px"
                       defaultLanguage={review.language}
                       value={review.code}
-                      theme='vs-dark'
+                      theme="vs-dark"
                       options={{
                         readOnly: true,
                         minimap: { enabled: false },
@@ -93,22 +82,35 @@ const SavedReviewsPage = () => {
                       }}
                     />
                   </div>
+
                   <div className={styles.resultBox}>
                     <Title level={5}>Review Result</Title>
-                    <Paragraph className={styles.paragraph}>{review.results}</Paragraph>
+                    <Paragraph className={styles.paragraph}>
+                      {review.reviewResults?.length ? (
+                        review.reviewResults.map((res, index) => (
+                          <div key={index}>
+                            <strong>Line {res.line}:</strong> {res.message}
+                          </div>
+                        ))
+                      ) : (
+                        <p>No review results found.</p>
+                      )}
+                    </Paragraph>
                   </div>
-                  <Button type='primary'>Export</Button>
+
+                  <Button type="primary">Export</Button>
                 </Collapse.Panel>
               ))}
             </Collapse>
           )}
         </div>
+
         <div className={`${styles.shape} ${styles.circle}`} />
         <div className={`${styles.shape} ${styles.square}`} />
         <div className={`${styles.shape} ${styles.triangle}`} />
       </div>
     </>
   );
-}
+};
 
 export default SavedReviewsPage;
