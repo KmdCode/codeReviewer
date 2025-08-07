@@ -19,6 +19,8 @@ namespace CodeReviewer.Domain.Reviews
         [Column(TypeName = "text")] 
         public string ReviewResultsJson { get; set; }
 
+        public string ReviewType { get; set; }
+
         public long UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]

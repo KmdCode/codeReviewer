@@ -16,6 +16,8 @@ namespace CodeReviewer.Services.Reviews.Dto
 
         public string Language { get; set; }
 
+        public string ReviewType { get; set; }
+
         public string Code { get; set; }
 
         public List<ReviewResult> ReviewResults { get; set; }

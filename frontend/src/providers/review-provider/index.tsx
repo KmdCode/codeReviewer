@@ -57,7 +57,8 @@ export const ReviewProvider = ({ children }: { children: React.ReactNode }) => {
 
         await instance.get(endpoint)
         .then((response) => {
-            dispatch(getSavedReviewsSuccess(response.data.items));
+            dispatch(getSavedReviewsSuccess(response.data.result.items));
+            console.log("myReviews:", response.data)
         }).catch((error) => {
             dispatch(getSavedReviewsError());
             console.error(error.message);

@@ -196,7 +196,7 @@ const ReviewPage = () => {
                     reviewName: values.reviewName,
                     language: language,
                     code: code,
-                    reviewResults: results
+                    reviewResults: results,
 
                 }
                 saveReview(newReview);
