@@ -6,6 +6,7 @@ using Abp.Extensions;
 using Castle.Facilities.Logging;
 using CodeReviewer.Configuration;
 using CodeReviewer.Identity;
+using CodeReviewer.Services.EmailService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SendGrid;
 using System;
 using System.IO;
 using System.Linq;
@@ -49,6 +51,11 @@ namespace CodeReviewer.Web.Host.Startup
             AuthConfigurer.Configure(services, _appConfiguration);
 
             services.AddSignalR();
+
+            DotNetEnv.Env.TraversePath().Load("./.env");
+            var key = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+            services.AddSingleton<ISendGridClient>(new SendGridClient(key));
+            services.AddTransient<ISendGridEmailService, SendGridEmailService>();
 
             services.Configure<HttpsRedirectionOptions>(options =>
             {
