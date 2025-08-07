@@ -1,18 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button, Select, Radio, Typography, Upload, message, List, Spin } from 'antd';
-import { UploadOutlined, OpenAIOutlined } from '@ant-design/icons';
+import { Button, Select, Radio, Typography, Upload, message, List, Spin, Form, Modal, Input } from 'antd';
+import { UploadOutlined, OpenAIOutlined, BookOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { useStyles } from './style/style';
-// import type { UploadFile } from 'antd/es/upload/interface';
 import Navbar from '@/components/navbar/Navbar';
 import { analyzeCode, Violation } from '@/utils/analyzer/staticAnalyzer';
 import type { UploadRequestOption, UploadRequestFile } from 'rc-upload/lib/interface';
 import { useReviewActions, useReviewState } from '@/providers/review-provider';
-import { useAuthActions} from '@/providers/auth-providers';
+import { useAuthActions } from '@/providers/auth-providers';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import AIImprovedCodeModal from '@/components/modals/AIImprovedCodeModal';
+import { IReview } from '@/providers/review-provider/context';
 
 const { Title } = Typography;
 
@@ -21,8 +21,8 @@ const ReviewPage = () => {
     const { styles } = useStyles();
     const [language, setLanguage] = useState('typescript');
     const [reviewType, setReviewType] = useState('static');
-    const { analyzeCSharpCode } = useReviewActions();
-    const { isPending, review } = useReviewState();
+    const { analyzeCSharpCode, saveReview } = useReviewActions();
+    const { isPending, review, completedReview } = useReviewState();
     const { getDeveloperProfile } = useAuthActions();
     const [code, setCode] = useState('// Paste or upload code');
     const [editorTheme, setEditorTheme] = useState<'vs-light' | 'vs-dark'>('vs-dark');
@@ -30,6 +30,17 @@ const ReviewPage = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isBreakdownVisible, setIsBreakdownVisible] = useState(false);
     const [improvedCode, setImprovedCode] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalVisibleAI, setIsModalVisibleAI] = useState(false);
+    const [form] = Form.useForm();
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const showModalAI = () => {
+        setIsModalVisibleAI(true);
+    };
 
     useEffect(() => {
         getDeveloperProfile();
@@ -176,6 +187,57 @@ const ReviewPage = () => {
         }
     };
 
+    const handleStaticReview = () => {
+        form
+            .validateFields()
+            .then((values) => {
+
+                const newReview: IReview = {
+                    reviewName: values.reviewName,
+                    language: language,
+                    code: code,
+                    reviewResults: review
+
+                }
+                saveReview(newReview);
+                setIsModalVisible(false);
+
+                form.resetFields();
+                message.success('Review saved successfully!');
+            })
+            .catch((info) => {
+                console.log('Validation Failed:', info);
+            });
+    };
+
+    const handleAIReview = () => {
+        form
+            .validateFields()
+            .then((values) => {
+
+                const newReview: IReview = {
+                    reviewName: values.reviewName,
+                    language: language,
+                    code: code,
+                    reviewResults: review
+
+                }
+                saveReview(newReview);
+                setIsModalVisible(false);
+
+                form.resetFields();
+                message.success('Review saved successfully!');
+            })
+            .catch((info) => {
+                console.log('Validation Failed:', info);
+            });
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        form.resetFields();
+    };
+
     return (
         <>
             <Navbar />
@@ -257,8 +319,9 @@ const ReviewPage = () => {
                             />
 
                             <div className={styles.resultActions}>
-                                <Button onClick={exportReviewAsTsPDF}>Export</Button>
+                                <Button onClick={exportReviewAsTsPDF}>Download Report</Button>
                                 <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
+                                <Button icon={<BookOutlined />} onClick={showModal}>Save Review</Button>
                             </div>
                         </div>
                     )}
@@ -279,8 +342,9 @@ const ReviewPage = () => {
                                 )}
                             />
                             <div className={styles.resultActions}>
-                                <Button onClick={exportReviewAsPDF}>Export</Button>
+                                <Button onClick={exportReviewAsPDF}>Download Review</Button>
                                 <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
+                                <Button icon={<BookOutlined />} onClick={showModalAI}>Save Review</Button>
                             </div>
                         </div>
                     )}
@@ -295,7 +359,42 @@ const ReviewPage = () => {
                 />
             </div>
 
-
+            <Modal
+                title="Save Review"
+                visible={isModalVisible}
+                onOk={handleAIReview}
+                onCancel={handleCancel}
+                okText="Save"
+                cancelText="Cancel"
+            >
+                <Form form={form} layout="vertical">
+                    <Form.Item
+                        name="reviewName"
+                        label="Review Name"
+                        rules={[{ required: true, message: 'Please enter a review name' }]}
+                    >
+                        <Input placeholder="Enter a name for this review" />
+                    </Form.Item>
+                </Form>
+            </Modal>
+            <Modal
+                title="Save Review"
+                visible={isModalVisibleAI}
+                onOk={handleAIReview}
+                onCancel={handleCancel}
+                okText="Save"
+                cancelText="Cancel"
+            >
+                <Form form={form} layout="vertical">
+                    <Form.Item
+                        name="reviewName"
+                        label="Review Name"
+                        rules={[{ required: true, message: 'Please enter a review name' }]}
+                    >
+                        <Input placeholder="Enter a name for this review" />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 }

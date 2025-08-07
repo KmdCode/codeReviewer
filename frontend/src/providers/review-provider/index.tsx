@@ -2,9 +2,19 @@
 import { useContext, useReducer } from "react";
 import { axiosInstance } from "@/utils/axiosInstance";
 import { Violation } from "@/utils/analyzer/staticAnalyzer";
-import { INITIAL_STATE, ICode, ReviewActionContext, ReviewStateContext } from "./context";
+import { INITIAL_STATE, ICode, ReviewActionContext, ReviewStateContext, IReview } from "./context";
 import { ReviewReducer } from "./reducer";
-import { analyzeCSharpCodePending, analyzeCSharpCodeSuccess, analyzeCSharpCodeError } from "./actions";
+import { 
+    analyzeCSharpCodePending, 
+    analyzeCSharpCodeSuccess, 
+    analyzeCSharpCodeError,
+    getSavedReviewsPending,
+    getSavedReviewsSuccess,
+    getSavedReviewsError,
+    saveReviewPending,
+    saveReviewSuccess,
+    saveReviewError
+} from "./actions";
 
 export const ReviewProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(ReviewReducer, INITIAL_STATE);
@@ -26,9 +36,37 @@ export const ReviewProvider = ({ children }: { children: React.ReactNode }) => {
         })
     }
 
+    const saveReview = async (review: IReview) => {
+        dispatch(saveReviewPending());
+
+        const endpoint: string = '/services/app/Review/Create';
+
+        await instance.post(endpoint, review)
+        .then((response) => {
+            dispatch(saveReviewSuccess(response.data))
+        }).catch((error)=>{
+            dispatch(saveReviewError());
+            console.error(error.message);
+        })
+    }
+
+    const getSavedReviews = async () => {
+        dispatch(getSavedReviewsPending());
+
+        const endpoint = '/services/app/Review/GetAll';
+
+        await instance.get(endpoint)
+        .then((response) => {
+            dispatch(getSavedReviewsSuccess(response.data.items));
+        }).catch((error) => {
+            dispatch(getSavedReviewsError());
+            console.error(error.message);
+        })
+    }
+
     return (
         <ReviewStateContext.Provider value={state}>
-            <ReviewActionContext.Provider value={{ analyzeCSharpCode}}>
+            <ReviewActionContext.Provider value={{ analyzeCSharpCode, saveReview, getSavedReviews}}>
                 {children}
             </ReviewActionContext.Provider>
         </ReviewStateContext.Provider>

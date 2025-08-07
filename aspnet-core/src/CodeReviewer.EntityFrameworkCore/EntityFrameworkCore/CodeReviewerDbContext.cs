@@ -4,6 +4,7 @@ using CodeReviewer.Authorization.Roles;
 using CodeReviewer.Authorization.Users;
 using CodeReviewer.MultiTenancy;
 using CodeReviewer.Domain.Developers;
+using CodeReviewer.Domain.Reviews;
 
 namespace CodeReviewer.EntityFrameworkCore
 {
@@ -11,7 +12,8 @@ namespace CodeReviewer.EntityFrameworkCore
     {
         /* Define a DbSet for each entity of the application */
         public DbSet<Developer> Developers { get; set; }
-        
+        public DbSet<Review> Reviews { get; set; }
+
         public CodeReviewerDbContext(DbContextOptions<CodeReviewerDbContext> options)
             : base(options)
         {

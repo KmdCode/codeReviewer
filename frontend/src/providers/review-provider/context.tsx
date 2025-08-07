@@ -6,15 +6,26 @@ export interface ICode {
     message?: string;
 }
 
+export interface IReview {
+    reviewName: string;
+    language: string;
+    code: string;
+    reviewResults?: ICode[];
+}
+
 export interface IReviewStateContext {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean; 
     review?: ICode[];
+    completedReview?: IReview;
+    myReviews?: IReview[];
 }
 
 export interface IReviewActionContext {
     analyzeCSharpCode: (code: string) => void;
+    saveReview: (results: IReview) => void;
+    getSavedReviews: () => void;
 }
 
 export const INITIAL_STATE: IReviewStateContext = {

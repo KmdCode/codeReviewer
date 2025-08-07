@@ -14,13 +14,14 @@ namespace CodeReviewer.Services.Developers
     {
         private readonly IRepository<Developer, Guid> _developerRepository;
         private readonly DeveloperManager _developerManager;
-        private readonly ISendGridEmailService _sendGridEmailService;
+        //private readonly ISendGridEmailService _sendGridEmailService;
 
-        public DeveloperAppService(IRepository<Developer, Guid> developerRepository, DeveloperManager developerManager, ISendGridEmailService sendGrid):base(developerRepository)
+        //ISendGridEmailService sendGrid
+        public DeveloperAppService(IRepository<Developer, Guid> developerRepository, DeveloperManager developerManager):base(developerRepository)
         {
             _developerRepository = developerRepository;
             _developerManager = developerManager;
-            _sendGridEmailService = sendGrid;
+            //_sendGridEmailService = sendGrid;
         }
 
         public override async Task<CreateDeveloperDto> CreateAsync (CreateDeveloperDto input)
@@ -54,7 +55,7 @@ namespace CodeReviewer.Services.Developers
                 
             if (developer == null)
             {
-                throw new UserFriendlyException("Patient profile not found.");
+                throw new UserFriendlyException("Developer profile not found.");
             }
 
             return new GetDeveloperDto

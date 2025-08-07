@@ -15,4 +15,30 @@ export const ReviewReducer = handleActions<IReviewStateContext, IReviewStateCont
         ...state,
         ...action.payload,
     }),
+    [ReviewActionEnum.saveReviewPending]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [ReviewActionEnum.saveReviewSuccess]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [ReviewActionEnum.saveReviewError]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [ReviewActionEnum.getSavedReviewsError]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [ReviewActionEnum.getSavedReviewsSuccess]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [ReviewActionEnum.getSavedReviewsPending]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    
+
 }, INITIAL_STATE)
