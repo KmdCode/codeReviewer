@@ -196,6 +196,7 @@ const ReviewPage = () => {
                     reviewName: values.reviewName,
                     language: language,
                     code: code,
+                    reviewType: reviewType,
                     reviewResults: results,
 
                 }

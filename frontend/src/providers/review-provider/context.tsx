@@ -12,7 +12,7 @@ export interface IReview {
   language: string;
   code: string;
   reviewResults?: ICode[];
-  reviewType?: 'AI' | 'Static';
+  reviewType?: string;
   date?: string;
 }
 
