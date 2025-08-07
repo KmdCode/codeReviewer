@@ -238,6 +238,11 @@ const ReviewPage = () => {
         form.resetFields();
     };
 
+    const handleCancelStatic = () => {
+        setIsModalVisible(false);
+        form.resetFields();
+    };
+
     return (
         <>
             <Navbar />
@@ -373,7 +378,7 @@ const ReviewPage = () => {
                         label="Review Name"
                         rules={[{ required: true, message: 'Please enter a review name' }]}
                     >
-                        <Input placeholder="Enter a name for this review" />
+                        <Input className={styles.save} placeholder="Enter a name for this review" />
                     </Form.Item>
                 </Form>
             </Modal>
@@ -381,7 +386,7 @@ const ReviewPage = () => {
                 title="Save Review"
                 visible={isModalVisible}
                 onOk={handleAIReview}
-                onCancel={handleCancel}
+                onCancel={handleCancelStatic}
                 okText="Save"
                 cancelText="Cancel"
             >
@@ -391,7 +396,7 @@ const ReviewPage = () => {
                         label="Review Name"
                         rules={[{ required: true, message: 'Please enter a review name' }]}
                     >
-                        <Input placeholder="Enter a name for this review" />
+                        <Input className={styles.save} placeholder="Enter a name for this review" />
                     </Form.Item>
                 </Form>
             </Modal>
