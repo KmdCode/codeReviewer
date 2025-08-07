@@ -22,6 +22,6 @@ namespace CodeReviewer.Services.Reviews.Dtos
         [Required]
         public string Code { get; set; }
 
-        public List<string> ReviewResults { get; set; } = new List<string>();
+        public List<ReviewResult> ReviewResults { get; set; } = new List<ReviewResult>();
     }
 }

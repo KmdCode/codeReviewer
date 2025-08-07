@@ -18,7 +18,7 @@ namespace CodeReviewer.Services.Reviews.Dto
 
         public string Code { get; set; }
 
-        public List<string> ReviewResults { get; set; }
+        public List<ReviewResult> ReviewResults { get; set; }
 
         public long UserId { get; set; }
 

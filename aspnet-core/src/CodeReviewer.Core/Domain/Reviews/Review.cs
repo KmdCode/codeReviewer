@@ -25,12 +25,18 @@ namespace CodeReviewer.Domain.Reviews
         public virtual User UserAccount { get; set; }
 
         [NotMapped]
-        public List<string> ReviewResults
+        public List<ReviewResult> ReviewResults
         {
             get => string.IsNullOrEmpty(ReviewResultsJson)
-                ? new List<string>()
-                : JsonSerializer.Deserialize<List<string>>(ReviewResultsJson);
+                ? new List<ReviewResult>()
+                : JsonSerializer.Deserialize<List<ReviewResult>>(ReviewResultsJson);
             set => ReviewResultsJson = JsonSerializer.Serialize(value);
         }
+    }
+
+    public class ReviewResult
+    {
+        public string Message { get; set; }
+        public int Line { get; set; }
     }
 }

@@ -10,7 +10,7 @@ export interface IReview {
     reviewName: string;
     language: string;
     code: string;
-    reviewResults: ICode;
+    reviewResults?: ICode[];
 }
 
 export interface IReviewStateContext {
