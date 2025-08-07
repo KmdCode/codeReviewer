@@ -161,7 +161,7 @@ const ReviewPage = () => {
         const lines = doc.splitTextToSize(code, 180);
         doc.text(lines, 14, finalY + 20);
 
-        doc.save("csharp-review-results.pdf");
+        doc.save("code-review-results.pdf");
     };
 
     const exportReviewAsTsPDF = () => {
@@ -196,7 +196,7 @@ const ReviewPage = () => {
         const lines = doc.splitTextToSize(code, 180);
         doc.text(lines, 14, finalY + 20);
 
-        doc.save("typescript-review-results.pdf");
+        doc.save("code-review-results.pdf");
     };
 
 
