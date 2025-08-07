@@ -13,9 +13,16 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import AIImprovedCodeModal from '@/components/modals/AIImprovedCodeModal';
 import { IReview } from '@/providers/review-provider/context';
+import useApp from "antd/es/app/useApp";
 
 const { Title } = Typography;
-
+declare module 'jspdf' {
+    interface jsPDF {
+        lastAutoTable?: {
+            finalY: number;
+        };
+    }
+}
 const ReviewPage = () => {
 
     const { styles } = useStyles();
@@ -33,6 +40,7 @@ const ReviewPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisibleAI, setIsModalVisibleAI] = useState(false);
     const [form] = Form.useForm();
+    const app = useApp();
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -75,14 +83,22 @@ const ReviewPage = () => {
         if (reviewType === "static" && language === "typescript") {
             setIsLoading(true);
             const issues = analyzeCode(code);
-            setResults(issues);
-            setIsLoading(false);
-            console.log(issues);
+            if (issues.length > 0) {
+                setResults(issues);
+                setIsLoading(false);
+                app.message.success("Review Completed");
+            } else {
+                app.message.success("Code is clean");
+                setIsLoading(false);
+            }
+
         }
         else if (reviewType === "static" && language === "csharp") {
 
             analyzeCSharpCode(code);
-            console.log("Review: ", review);
+            if (!review) {
+                app.message.success("Code is clean");
+            }
 
         }
         else if (reviewType === "ai") {
@@ -121,7 +137,6 @@ const ReviewPage = () => {
         }
 
         const doc = new jsPDF();
-
         doc.setFontSize(18);
         doc.text("Code Review Results", 14, 22);
 
@@ -137,12 +152,21 @@ const ReviewPage = () => {
             body: tableData,
         });
 
+        const finalY = (doc).lastAutoTable?.finalY || 40;
+
+        doc.setFontSize(16);
+        doc.text("Reviewed Code", 14, finalY + 10);
+
+        doc.setFontSize(10);
+        const lines = doc.splitTextToSize(code, 180);
+        doc.text(lines, 14, finalY + 20);
+
         doc.save("csharp-review-results.pdf");
     };
 
     const exportReviewAsTsPDF = () => {
         if (!results || results.length === 0) {
-            message.warning("No results results to export.");
+            message.warning("No review results to export.");
             return;
         }
 
@@ -154,7 +178,7 @@ const ReviewPage = () => {
         const tableData = results.map(item => {
             const line = item.line !== undefined ? item.line : '';
             const message = item.message !== undefined ? item.message : '';
-            return [line, message, code];
+            return [line, message];
         });
 
         autoTable(doc, {
@@ -162,8 +186,19 @@ const ReviewPage = () => {
             head: [["Line", "Message"]],
             body: tableData,
         });
+
+        const finalY = (doc).lastAutoTable?.finalY || 40;
+
+        doc.setFontSize(16);
+        doc.text("Reviewed Code", 14, finalY + 10);
+
+        doc.setFontSize(10);
+        const lines = doc.splitTextToSize(code, 180);
+        doc.text(lines, 14, finalY + 20);
+
         doc.save("typescript-review-results.pdf");
     };
+
 
     const handleAIBreakdown = async () => {
         try {
@@ -336,7 +371,7 @@ const ReviewPage = () => {
                 <Spin spinning={isPending} tip="Reviewing code..." size="large">
                     {review && review.length > 0 && (
                         <div className={styles.results}>
-                            <Title level={4}>Review review</Title>
+                            <Title level={4}>Review results</Title>
                             <List
                                 bordered
                                 dataSource={review}
