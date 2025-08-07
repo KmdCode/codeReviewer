@@ -14,14 +14,13 @@ namespace CodeReviewer.Services.Developers
     {
         private readonly IRepository<Developer, Guid> _developerRepository;
         private readonly DeveloperManager _developerManager;
-        //private readonly ISendGridEmailService _sendGridEmailService;
+        private readonly ISendGridEmailService _sendGridEmailService;
 
-        //ISendGridEmailService sendGrid
-        public DeveloperAppService(IRepository<Developer, Guid> developerRepository, DeveloperManager developerManager):base(developerRepository)
+        public DeveloperAppService(IRepository<Developer, Guid> developerRepository, DeveloperManager developerManager, ISendGridEmailService sendGrid) : base(developerRepository)
         {
             _developerRepository = developerRepository;
             _developerManager = developerManager;
-            //_sendGridEmailService = sendGrid;
+            _sendGridEmailService = sendGrid;
         }
 
         public override async Task<CreateDeveloperDto> CreateAsync (CreateDeveloperDto input)
@@ -36,13 +35,13 @@ namespace CodeReviewer.Services.Developers
                         input.Password
                     );
 
-            //await _sendGridEmailService.SendEmailAsync(
-            //    input.Email,
-            //    "Welcome to CodeReviewer",
-            //    $"Hello {input.Name},<br/>Thank you for registering as a developer on CodeReviewer. Your account has been successfully created.<br/>Username: {input.Username}<br/>Please keep your credentials safe."
-            //    );
+            await _sendGridEmailService.SendEmailAsync(
+                input.Email,
+                "Welcome to CodeReviewer",
+                $"Hello {input.Name},<br/>Thank you for registering as a developer on CodeReviewer. Your account has been successfully created.<br/>Username: {input.Username}<br/>Please keep your credentials safe."
+                );
 
-                return input;
+            return input;
             
         }
 
