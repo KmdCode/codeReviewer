@@ -39,6 +39,7 @@ const ReviewPage = () => {
     const [improvedCode, setImprovedCode] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisibleAI, setIsModalVisibleAI] = useState(false);
+    const [isImproving, setIsImproving] = useState(false);
     const [form] = Form.useForm();
     const app = useApp();
 
@@ -201,6 +202,7 @@ const ReviewPage = () => {
 
 
     const handleAIBreakdown = async () => {
+        setIsImproving(true);
         try {
             const res = await fetch("/api/ai-improved-code", {
                 method: "POST",
@@ -213,12 +215,15 @@ const ReviewPage = () => {
             if (data?.improvedCode) {
                 setImprovedCode(data.improvedCode);
                 setIsBreakdownVisible(true);
+                app.message.success("Code improved");
             } else {
-                message.error("Failed to get improved code.");
+                app.message.error("Failed to get improved code.");
             }
         } catch (err) {
             console.error(err);
             message.error("AI breakdown failed.");
+        } finally {
+            setIsImproving(false);
         }
     };
 
@@ -361,7 +366,9 @@ const ReviewPage = () => {
 
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsTsPDF}>Download Report</Button>
-                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
+                                <Spin spinning={isImproving} size="small">
+                                    <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
+                                </Spin>
                                 <Button icon={<BookOutlined />} onClick={showModalAI}>Save Review</Button>
                             </div>
                         </div>
@@ -384,7 +391,9 @@ const ReviewPage = () => {
                             />
                             <div className={styles.resultActions}>
                                 <Button onClick={exportReviewAsPDF}>Download Review</Button>
-                                <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
+                                <Spin spinning={isImproving} size="small">
+                                    <Button icon={<OpenAIOutlined />} onClick={handleAIBreakdown}>Improve Code</Button>
+                                </Spin>
                                 <Button icon={<BookOutlined />} onClick={showModal}>Save Review</Button>
                             </div>
                         </div>

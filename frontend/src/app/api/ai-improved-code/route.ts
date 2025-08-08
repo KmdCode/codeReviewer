@@ -28,7 +28,7 @@ Also be sure to make sure that the following rules are followed:
     -camel case (Pascal for c#)
     - must declare return type
 
-Return only the improved code without explanations.
+Return only the improved code with comments of improvements, without explanations.
 
 Code:
 \`\`\`${language}
