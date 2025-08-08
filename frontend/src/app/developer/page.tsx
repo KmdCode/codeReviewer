@@ -46,15 +46,18 @@ const HomePage = () => {
             </Col>
             <Col xs={24} sm={12} md={8}>
               <Card className={styles.benefitCard} bordered={false}>
-                <Title level={4}>Beginner Friendly</Title>
+                <Title level={4}>Review Pull Requests</Title>
                 <Paragraph>
-                  Learn and grow — this tool teaches you good coding habits along the way.
+                  Review your pull requests and get instant feedback on code enhancements
                 </Paragraph>
+                <Button type="link" href='https://github.com/apps/fusioncodereview' target="_blank" rel="noopener noreferrer">
+                  Go to GitHub App
+                </Button>
               </Card>
             </Col>
           </Row>
           <Button type="primary" size="large" className={styles.demoBtn}>
-            <Link href="/review">Review Now</Link>
+            <Link href="/developer/review">Review Now</Link>
           </Button>
         </section>
 
@@ -63,7 +66,7 @@ const HomePage = () => {
           <div className={styles.screenshots}>
             <div className={styles.screenshot}>
               <Image
-                src="/images/preview1.jpg"
+                src="/images/image5.png"
                 alt="Review Page Screenshot"
                 width={500}
                 height={300}
@@ -72,13 +75,14 @@ const HomePage = () => {
             </div>
             <div className={styles.screenshot}>
               <Image
-                src="/images/preview2.jpg"
-                alt="Result Page Screenshot"
+                src="/images/image6.png"
+                alt="Review Page Screenshot"
                 width={500}
                 height={300}
                 layout="responsive"
               />
             </div>
+            
           </div>
         </section>
         <div className={`${styles.shape} ${styles.circle}`} />

@@ -37,7 +37,7 @@ const Navbar = () => {
   return (
     <header className={styles.navbar}>
       <div className={styles.logo}>
-        <Link href="/developer">FusionReview</Link>
+        <Link href="/developer">FusionCodeReview</Link>
       </div>
 
       {!isMobile ? (
