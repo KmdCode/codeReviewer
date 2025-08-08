@@ -97,8 +97,6 @@ const SavedReviewsPage = () => {
                       )}
                     </Paragraph>
                   </div>
-
-                  <Button type="primary">Export</Button>
                 </Collapse.Panel>
               ))}
             </Collapse>
